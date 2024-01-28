@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Login</title>
+  <style>
+  #login {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid;
+    padding: 30px;
+  }
+  .username {
+    margin-left: 29px;
+  }
+  .password{
+    margin-top: 10px;
+  }
+  .buttons {
+    display: flex;
+    margin-top: 15px;
+    justify-content: flex-end;
+
+  }
+  .register {
+    margin-right: 5px;
+  }
+  .div-button {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .submit-button{
+    margin-top: 10px;
+    padding: 5px 10px 5px;
+
+  }
+  .submit-button:hover {
+    background-color: red;
+    color: white;
+  }
+
+  </style>
+</head>
+<body>
+
+  <form action="/login" id="login" method="POST">
+  <h2>Login</h2>  
+  <div>
+  <label for="Name">Name</label>
+  <input class="username" name="username" type="text" placeholder="Your name here...." autocomplete="off">
+  </div>
+
+  <div>
+  <label for="Password">Password</label>  
+  <input class="password" name="password" type="password" autocomplete="off">
+  </div>
+ 
+  <div class="div-button">
+  <button type="submit" class="submit-button">Submit</button>
+  </div>
+  <a href="/signup">Or, you can create an account</a>
+  </form>
+
+  <script>
+      const form = document.querySelector('#login');
+        
+      form.addEventListener('submit', async(event)=> {
+            event.preventDefault();
+            let username = document.querySelector('.username').value;
+            let password = document.querySelector('.password').value;
+           
+            const response = await fetch('http://127.0.0.1:3800/login', {
+                  method: 'POST',
+                  headers: {
+                            'Content-Type': 'application/json',
+                           },
+                  body: JSON.stringify({
+                            username:username,
+                            password:password,
+                           }),
+                })
+            try {
+              const data = await response.json();
+              if(data.user.password) {
+                  window.location.href = '/secret-route';
+              } else {
+                  alert('Incorrect username or password!');
+              }
+            }
+            catch(err) {
+                  console.log(err);
+            }
+          });        
+  </script>
+
+
+
+
+</body>
+</html>

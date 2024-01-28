@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Register</title>
+  <style>
+  #register {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid;
+    padding: 30px;
+  }
+  .name {
+    margin-left: 29px;
+  }
+  .email {
+    margin-top: 10px;
+    margin-left: 30px;
+  }
+  .password{
+    margin-top: 10px;
+  }
+  .buttons {
+    display: flex;
+    margin-top: 15px;
+  }
+  .submit {
+    
+  }
+
+  </style>
+</head>
+<body>
+
+  <form action="/register" id="register" method="POST">
+  <h2>Register</h2>  
+  <div>
+  <label for="Name">Name</label>
+  <input class="name" type="text" required autocomplete="off">
+  <small></small>
+  </div>
+
+  <div>
+  <label for="Email">Email</label>
+  <input class="email" type="email" required autocomplete="off">
+  </div>
+
+  <div>
+  <label for="Password">Password</label>  
+  <input class="password" type="password" required autocomplete="off">
+  </div>
+  <div class="buttons">
+    <button class="submit" type="submit">Submit</button>
+  </div>
+  </form>
+
+  <script>
+        const form= document.querySelector('#register');
+        form.addEventListener('submit', (event) => {
+              event.preventDefault();
+              name = document.querySelector('.name').value;              
+              email = document.querySelector('.email').value;
+              password = document.querySelector('.password').value;         
+
+              const credentials = fetch('http://127.0.0.1:3800/register', {
+                    method: 'POST',
+                    headers: {
+                          'Content-Type': 'application/json',
+                        },
+                    body: JSON.stringify({ 
+                          username:name, 
+                          email:email, 
+                          password:password,
+                        }),
+                  })
+                .then(response => response.json())
+                .then(data => console.log(data));
+        });
+  </script>
+</body>
+</html>
+
+
