@@ -21,6 +21,10 @@ app.use(bodyParser.json())
 const __dirname = dirname(fileURLToPath(import.meta.url));
 console.log(__dirname);
 
+// serve static pages,
+app.use(express.static(__dirname));
+
+
 // connecting database to server,
 const connection = mysql.createConnection({
   host : process.env.DB_HOST,
