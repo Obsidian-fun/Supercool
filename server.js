@@ -31,6 +31,7 @@ const connection = mysql.createConnection({
   user : process.env.DB_USER,
   database : process.env.DB_NAME,
   password : process.env.DB_PASSWORD,
+  charset : "utf8mb4"
 });
 connection.connect();
 
