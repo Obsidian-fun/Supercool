@@ -8,12 +8,12 @@
   <style>
 
   body{
-    background-color: #161716;    /*#3c2207;*/ 
+    background-color: #081d5b;    /*#3c2207;*/ 
   }
 
   h1{
     color: #d3e4d5;
-    background-color: #161716;  /*#3c2207;*/ 
+    background-color: #081d5b;  /*#3c2207;*/ 
     padding-left: 20px;
     font-family: Chalkduster, fantasy;
   }
@@ -21,6 +21,10 @@
   h2{
     font-size:1.5rem;
     color: #d3e4d5;
+  }
+
+  em {
+    
   }
 
   .navbar {
@@ -54,25 +58,63 @@
     padding: 10px;
     background-color: #ea8e3d;
     border-radius: 5px;
+    margin-bottom: 10px;
   }
   .register {
     margin-right: 5px;
   }
-  .div-button {
-    display: flex;
-    justify-content: flex-end;
+ 
+  .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
   }
-  .submit-button{
-    margin-top: 15px;
-    margin-bottom: 15px;
-    padding: 5px 10px 5px;
 
+  .center {
+  width: 180px;
+  height: 60px;
+  position: absolute;
   }
+
+  .submit-button {
+  width: 180px;
+  height: 60px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #91C9FF;
+  outline: none;
+  transition: 1s ease-in-out;
+  }
+
+  svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  fill: none;
+  stroke: #fff;
+  stroke-dasharray: 150 480;
+  stroke-dashoffset: 150;
+  transition: 0.5s ease-in-out;
+  }
+
   .submit-button:hover {
-    background-color: red;
-    color: white;
+  transition: 1s ease-in-out;
+  background: red;
   }
 
+  .submit-button:hover svg {
+  stroke-dashoffset: -480;
+  }
+
+  .submit-button span {
+  color: white;
+  font-size: 18px;
+  font-weight: 100;
+  }
+  .call {
+    margin-top: 50px;
+  }
 
   </style>
 </head>
@@ -85,7 +127,8 @@
   <canvas id="canvas1">
   <script src="particleEffectJS.js"></script>
   </canvas>
-  
+ 
+  <div>
   <form action="/login" id="login" method="POST">
   <h2>Login</h2>  
   <div>
@@ -96,18 +139,28 @@
   <input class="password" name="password" type="password" placeholder="Password" autocomplete="off">
   </div>
  
-  <div class="div-button">
-  <button type="submit" class="submit-button">Submit</button>
+  <div class="container">
+    <div class="center">
+      <button type="submit" class="submit-button">
+        <svg width="180px" height="60px" viewBox="0 0 180 60" class="border">
+          <polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" />
+          <polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" />
+        </svg>
+        <span>Log In</span>
+      </button>
+    </div>
   </div>
-  <span>Or, you can</span> <a href="/signup">create an account</a>
+  <div class="call">
+    <span>Or, you can</span> <a href="/signup">create an account</a>
+  </div>
   </form>
-  
+  </div>
 
-
+  <!--
   <footer>
     Copyright &copy; Obsidian creations 2023
   </footer>  
-
+  -->
 
   <script>
       const form = document.querySelector('#login');
