@@ -73,9 +73,6 @@
     color: white;
   }
 
-  .sticky {
-    color:white;
-  }
 
   </style>
 </head>
@@ -120,7 +117,7 @@
             let username = document.querySelector('.username').value;
             let password = document.querySelector('.password').value;
            
-            const response = await fetch('http://127.0.0.1:3800/login', {
+            const response = await fetch('http://127.0.0.1:3890/login', {
                   method: 'POST',
                   headers: {
                             'Content-Type': 'application/json',
@@ -143,8 +140,6 @@
             }
           });        
   </script>
-
-
 
 
 </body>

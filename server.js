@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 // Connecting server to listen on a port,
 let port = process.env.PORT || 3000;
 
-app.use(cors()) // Enable ALL cross origin sharing ( DANGEROUS )
+app.use(cors()) // Enable ALL cross origin sharing ( DANGEROUS - PLEASE CHANGE IN PRODUCTION)
 app.use(bodyParser.json())
 
 // setting the default path
