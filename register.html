@@ -70,10 +70,56 @@
     background-color: #ea8e3d;
     border-radius: 5px;
   }
-  .buttons {
-    display: flex;
-    margin-top: 15px;
+
+  .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
   }
+
+  .center {
+  width: 180px;
+  height: 60px;
+  position: absolute;
+  }
+
+  .submit-button {
+  width: 180px;
+  height: 60px;
+  cursor: pointer;
+  background: black;
+  border: 1px solid #91C9FF;
+  outline: none;
+  transition: 1s ease-in-out;
+  }
+
+  svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  fill: none;
+  stroke: #fff;
+  stroke-dasharray: 150 480;
+  stroke-dashoffset: 150;
+  transition: 0.5s ease-in-out;
+  }
+
+  .submit-button:hover {
+  transition: 1s ease-in-out;
+  background: red;
+  }
+
+  .submit-button:hover svg {
+  stroke-dashoffset: -480;
+  }
+
+  .submit-button span {
+  color: white;
+  font-size: 18px;
+  font-weight: 100;
+  }
+  
 
   </style>
 </head>
@@ -100,8 +146,17 @@
   <div>
   <input class="password" type="password" placeholder="Password" required autocomplete="off">
   </div>
-  <div class="buttons">
-    <button class="submit" type="submit">Submit</button>
+
+    <div class="container">
+    <div class="center">
+      <button type="submit" class="submit-button">
+        <svg width="180px" height="60px" viewBox="0 0 180 60" class="border">
+          <polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" />
+          <polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" />
+        </svg>
+        <span>Sign me up!</span>
+      </button>
+    </div>
   </div>
   </form>
 
