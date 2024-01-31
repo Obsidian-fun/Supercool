@@ -4,6 +4,39 @@
   <meta charset="UTF-8">
   <title>Simple Register</title>
   <style>
+
+  body {
+    background-color: #3c2207;    
+  }
+
+  h1{
+    color: #d3e4d5;
+    background-color: #3c2207;
+    padding-left: 20px;
+    font-family: Chalkduster, fantasy;
+  }
+
+  em {
+    background: linear-gradient(to right, violet, red);
+    color: #1eeaaa;
+  }
+
+  h2 {
+    font-size:1.5rem;
+    color: #d3e4d5;
+  }
+
+  .navbar{
+    color: #d3e4d5;
+    font-family: Chalkduster, fantasy;
+    font-size: 1.1rem;
+    padding-left: 20px;
+  }
+
+  .navbar:hover {
+    color: yellow;
+  }
+
   #register {
     position: absolute;
     top: 50%;
@@ -45,8 +78,12 @@
 <body>
 
   <h1>SUPER&nbsp<em>COOL </em>&nbspCHATROOM</h1>
-  <a href="#" class="navbar">Home</a>
+  <a href="/" class="navbar">Home</a>
   <a href="#" class="navbar">About</a>
+
+  <canvas id="canvas1">
+  <script src="particleEffectJS.js"></script>
+  </canvas>  
 
   <form action="/register" id="register" method="POST">
   <h2>Register</h2>  
