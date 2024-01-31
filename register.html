@@ -10,46 +10,56 @@
     left: 50%;
     transform: translate(-50%, -50%);
     border: 1px solid;
-    padding: 30px;
+    padding: 50px;
+    background-color: #c01f61;
+    opacity: 0.95;
+    border-radius: 30px;
   }
   .name {
-    margin-left: 29px;
+    font-size: 1.1rem;
+    padding: 10px;
+    background-color: #ea8e3d;
+    border-radius: 5px;
   }
   .email {
     margin-top: 10px;
-    margin-left: 30px;
+    font-size: 1.1rem;
+    padding: 10px;
+    background-color: #ea8e3d;
+    border-radius: 5px;
   }
   .password{
     margin-top: 10px;
+    font-size: 1.1rem;
+    padding: 10px;
+    background-color: #ea8e3d;
+    border-radius: 5px;
   }
   .buttons {
     display: flex;
     margin-top: 15px;
-  }
-  .submit {
-    
   }
 
   </style>
 </head>
 <body>
 
+  <h1>SUPER&nbsp<em>COOL </em>&nbspCHATROOM</h1>
+  <a href="#" class="navbar">Home</a>
+  <a href="#" class="navbar">About</a>
+
   <form action="/register" id="register" method="POST">
   <h2>Register</h2>  
   <div>
-  <label for="Name">Name</label>
-  <input class="name" type="text" required autocomplete="off">
-  <small></small>
+  <input class="name" type="text" placeholder="Name" required autocomplete="off">
   </div>
 
   <div>
-  <label for="Email">Email</label>
-  <input class="email" type="email" required autocomplete="off">
+  <input class="email" type="email" placeholder="Email" required autocomplete="off">
   </div>
 
   <div>
-  <label for="Password">Password</label>  
-  <input class="password" type="password" required autocomplete="off">
+  <input class="password" type="password" placeholder="Password" required autocomplete="off">
   </div>
   <div class="buttons">
     <button class="submit" type="submit">Submit</button>
@@ -81,5 +91,4 @@
   </script>
 </body>
 </html>
-
 
