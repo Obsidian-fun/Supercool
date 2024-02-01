@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn about Sockets</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>const socket = io(); </script>
+  <script def src="client.js" type="module"></script>
+  <style>
+
+  body {
+    background-color: #3c2207;
+  }
+
+
+  h1{ 
+    color: #d3e4d5;
+    background-color: #3c2207;
+    padding-left: 20px;
+    font-family: Chalkduster, fantasy;
+  } 
+
+  em {
+    background: linear-gradient(to right, violet, red);
+    color: #1eeaaa;
+  }
+ 
+  .navbar{
+      color: #d3e4d5;
+      padding-left: 20px;
+      font-family: Chalkduster, fantasy;
+      font-size: 1.1rem;1rem
+  }
+
+    .Chatbox{
+      margin-left: 10%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      height: 100vh;
+      width: 90%;
+      max-width: 1200px;
+      background-color: #3c2207;
+    }
+    #message {
+      list-style-type: none;
+      color: white;
+      margin: 0px;
+      padding: 0px;
+    }
+    #message > li {
+      padding:0 1rem;
+      flex-grow: 1;
+      font-size: 1.5rem;
+    }
+    #message > li:nth-child(odd) {
+      background: grey;
+      font-size: 1.5rem;
+    }
+    #message-container {
+      border: 1px solid #864875;
+      flex-grow: 1;
+      overflow-y:auto;
+      border-radius: 5px;
+      background-color: black;
+      border-width: medium;
+      padding: 5px;
+      display: flex;
+      flex-direction: column;
+    }
+    #message-input {
+      width:75%;
+      font-size:1.5rem;
+      margin-top: 10px;
+      border: 4px solid #7741f7;
+      border-radius: 5px;
+    }
+
+  </style>
+</head>
+<body>
+  <div>
+    <h1>SUPER&nbsp<em>COOL </em>&nbspCHATROOM</h1>
+    <a href="/" class="navbar">Home</a>
+    <a href="#" class="navbar">About</a> 
+  </div>
+
+  <div class="Chatbox">
+
+    <div id="message-container">
+      <ul id="message"></ul>
+    
+    <form id="form" action="submit">
+       <input type="text" id="message-input" placeholder="Message...">
+    </form> 
+    </div>
+  </div>
+
+</body>
