@@ -17,10 +17,11 @@ server.listen(3800, () =>{
 app.use(cors('http://localhost:3800')); // To remove blocking nature of cross-origin scripting
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+console.log(__dirname);
 app.use(express.static(path.join(__dirname,'/')));
 
 app.get('/', (req,res) => {
-  res.sendFile(join(__dirname, 'index.html'));
+  res.sendFile(join(__dirname, 'chatroom.html'));
 });
 
 // For socket on make sure the name of the socket and the function variables match on both the server and client side

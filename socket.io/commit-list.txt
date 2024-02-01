@@ -7,12 +7,12 @@ Main commits left to complete project,
 4. Learn about connection states, create a disconnection button to toggle state.
 5. Learn how to implement keyboard shortcuts to access elements for e.g. press 'tab' for messages or '/' to switch rooms.
 6. Read documentation on implementing socket.io on reverse proxy services such as nginx.
-7. Learn user-authentication in MariaDB that includes - Username, email and password.
-8. Implement user-authentication that includes - Username, email and password.
+ //7. Learn user-authentication in MariaDB that includes - Username, email and password.
+ //8. Implement user-authentication that includes - Username, email and password.
 9. Show users on the left hand side when they connect, to see who all are online.
 10. Time stamps for messages.
 11. Add '${user}' is typing functionality.
-12. Stylize front page with particle physics from Frank's Labratory.
+ //12. Stylize front page with particle physics from Frank's Labratory.
 
 Exec this in vim, once done,
 
