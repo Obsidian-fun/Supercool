@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learn about Sockets</title>
+    <title>Supercool | Chat</title>
   <script src="/socket.io/socket.io.js"></script>
   <script>const socket = io(); </script>
   <script def src="client.js" type="module"></script>
@@ -31,40 +31,46 @@
       color: #d3e4d5;
       padding-left: 20px;
       font-family: Chalkduster, fantasy;
-      font-size: 1.1rem;1rem
+      font-size: 1.1rem;
   }
 
-  .Display-Panel {
-    display: flex;
+  .Container {
+    display: grid;
+    grid-template-columns: 25% 75%;
   }
 
-    .Chatbox{
+  .Container .Users{
+    background-color: black;
+    color: white;
+    border: 1px solid #9400d3;
+    padding: 15px;
+  }
+
+  .Container .Chatbox{
       position: relative;
-      margin-left: 20%;
       display: flex;
-      justify-content: center;
-      flex-direction: column;
       height: 100vh;
+      margin: auto;
       width: 88%;
       background-color: #3c2207;
     }
-    #message {
+  #message {
       list-style-type: none;
       color: white;
       margin: 0px;
       padding: 0px;
     }
-    #message > li {
+  #message > li {
       padding:0 1rem;
       flex-grow: 1;
       font-size: 1.5rem;
     }
-    #message > li:nth-child(odd) {
+  #message > li:nth-child(odd) {
       background: grey;
       font-size: 1.5rem;
     }
-    #message-container {
-      border: 1px solid #864875;
+  #message-container {
+      border: 1px solid #9400d3;
       flex-grow: 1;
       overflow-y:auto;
       border-radius: 5px;
@@ -73,10 +79,10 @@
       display: flex;
       flex-direction: column;
     }
-    .Chatbox #message-input {
+  .Chatbox #message-input {
       position: absolute;
       bottom: 0;
-      width: 99%;
+      width: 98%;
       font-size:1.5rem;
       border: 4px solid #7741f7;
       border-radius: 5px;
@@ -92,11 +98,16 @@
     <a href="#" class="navbar">About</a> 
   </div>
 
-  <div class="Display-panel">
+ <div class="Container">
   <!-- User List -->
-  <div class="User-List">
-    <h3>User List</h3>
-
+  <div class="Users">
+    <h3><u>User List</u></h3>
+    <li>User 1 <small>Online </small></li>
+    <li>User 2 <small>Offline</small></li>
+    <li>User 3 <small>Offline</small></li>
+    <li>User 4 <small>Online</small></li>
+  </div>
+ 
   <!-- Chatbox -->
   <div class="Chatbox">
     <div id="message-container">
@@ -107,5 +118,5 @@
     </div>
   </div>
   
-  </div>
+ </div>
 </body>
