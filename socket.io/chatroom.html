@@ -35,13 +35,14 @@
   }
 
     .Chatbox{
-      margin-left: 10%;
+      position: relative;
+      margin-left: 20%;
+      margin-top: 10px;
       display: flex;
       justify-content: center;
       flex-direction: column;
       height: 100vh;
-      width: 90%;
-      max-width: 1200px;
+      width: 88%;
       background-color: #3c2207;
     }
     #message {
@@ -70,10 +71,11 @@
       display: flex;
       flex-direction: column;
     }
-    #message-input {
-      width:75%;
+    .Chatbox #message-input {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
       font-size:1.5rem;
-      margin-top: 10px;
       border: 4px solid #7741f7;
       border-radius: 5px;
     }
