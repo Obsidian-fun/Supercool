@@ -34,15 +34,21 @@
       font-size: 1.1rem;
   }
 
+  .navbar:hover {
+      color: yellow;
+  }      
+
   .Container {
     display: grid;
-    grid-template-columns: 25% 75%;
+    grid-template-columns: 25% 85%;
+    column-gap: 0;
+    margin-top: 10px;
   }
 
   .Container .Users{
     background-color: black;
     color: white;
-    border: 1px solid #9400d3;
+    border: 3px solid #9400d3;
     padding: 15px;
   }
 
@@ -50,7 +56,6 @@
       position: relative;
       display: flex;
       height: 100vh;
-      margin: auto;
       width: 88%;
       background-color: #3c2207;
     }
