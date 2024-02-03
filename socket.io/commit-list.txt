@@ -13,6 +13,9 @@ Main commits left to complete project,
 10. Time stamps for messages.
 11. Add '${user}' is typing functionality.
  //12. Stylize front page with particle physics from Frank's Labratory.
+13. Introduce double opt-in (email verification to limit spammers)
+
+
 
 Exec this in vim, once done,
 

@@ -185,7 +185,7 @@
             try {
               const data = await response.json();
               if(data.user.password) {
-                  window.location.href = '/secret-route';
+                  window.location.href = '/chatroom';
               } else {
                   alert('Incorrect username or password!');
               }

@@ -4,17 +4,23 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import bcrypt from 'bcryptjs'; // Find out right ES6 import import { v4 as uuid } from 'uuid';
-import jwt from 'jsonwebtoken';  // Find out right ES6 import
 import 'dotenv/config';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import mysql from 'mysql';
-import { v4 as uuidv4 } from 'uuid';
+
+// socket.io imports,
+import { Server } from 'socket.io';
+import { createServer } from 'http';  // Routing
+
+const server=createServer(app);
+const io= new Server(server);
+
 
 // Connecting server to listen on a port,
 let port = process.env.PORT || 3000;
 
-app.use(cors()) // Enable ALL cross origin sharing ( DANGEROUS - PLEASE CHANGE IN PRODUCTION)
+app.use(cors('http://localhost:${process.env.PORT}')) // Enable ALL cross origin sharing ( DANGEROUS - PLEASE CHANGE IN PRODUCTION)
 app.use(bodyParser.json())
 
 // setting the default path
@@ -45,36 +51,6 @@ app.get('/signup', (req,res)=> {
   res.sendFile(join(__dirname,'register.html'));
 });
 
-/*
-// Middleware functions,
-function isLoggedIn(req, res, next) {
-  if(!req.headers.authorization) {
-    return res.status(401).send({
-      message:"Not logged in!"
-    });
-  }
-  try {
-    const authHeader = req.headers.authorization;
-    console.log('authHeader = '+ authHeader + '\n');
-    const token = authHeader.split(' ')[1];
-    console.log('token = ' + token + '\n');
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET,(err, decoded)=>{
-        if(err) {
-          res.status(401).send({
-            message:'Something wrong'
-          });
-        }
-    console.log('decoded = ' + decoded); 
-    req.userData = decoded;
-    next(); });
-  } catch (err) {
-     return res.status(401).send({
-       message:err,
-     });
-  }
-}
-
-*/
 
 // All the POST routes,
 app.post('/register', (req, res)=>{
@@ -151,8 +127,25 @@ app.post('/login', async (req, res)=> {
 
 
 // Secret route, only logged in users can fetch these pages,
-app.get('/secret-route', (req, res)=> {
-  res.sendFile(join(__dirname,'/secret.html'));
+app.get('/chatroom', (req, res)=> {
+// For socket on make sure the name of the socket and the function variables match on both the server and client side
+  res.sendFile(join(__dirname,'chatroom.html'));
+
+  io.on('connection', (socket) =>{
+  
+    io.emit('connection', `User has connected at ${socket.id}`);
+    console.log(`User has connected at ${socket.id}`);
+
+    socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+    });
+
+    socket.on('disconnect', (msg) => {
+    console.log(socket.id, 'User disconnected');
+    });
+
+  });
+
 });
 
 app.listen(port, ()=> {
