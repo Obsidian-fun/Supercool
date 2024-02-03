@@ -148,7 +148,7 @@ app.get('/chatroom', (req, res)=> {
 
 });
 
-app.listen(port, ()=> {
+server.listen(port, ()=> {
   console.log(`Server listening on ${port}`);
 });
 

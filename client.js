@@ -4,6 +4,10 @@
 //localStorage.setItem('username',username);
 //const user = localStorage.getItem('username');
 
+const URL = "http://localhost:3890";
+const socket = io();   //URL, { autoConnect: false });
+
+
 const input = document.querySelector('.Chatbox #message-container #message-input');
 const form = document.querySelector('.Chatbox #message-container #form');
 const message = document.querySelector('.Chatbox #message-container #message');
@@ -39,7 +43,7 @@ socket.on('disconnect' , (msg)=>{
 function display(message) {
   const el = document.createElement('li');
   el.innerText = `${message}`;
-  document.querySelector('ul').append(el);
+  document.querySelector('.Chatbox #message-container #message').append(el);
 }
 
 // check out differences between textContent, innerHTML and innerText at https://builtin.com/software-engineering-perspectives/innerhtml-vs-innertext

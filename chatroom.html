@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supercool | Chat</title>
   <script src="/node_modules/socket.io/client-dist/socket.io.js"></script>
-  <script>const socket = io(); </script>
   <script def src="client.js" type="module"></script>
   <style>
 
@@ -64,22 +63,22 @@
       width: 88%;
       background-color: #3c2207;
     }
-  #message {
+  .Chatbox #message-container #message {
       list-style-type: none;
       color: white;
       margin: 0px;
       padding: 0px;
     }
-  #message > li {
+  .Chatbox #message-container #message > li {
       padding:0 1rem;
       flex-grow: 1;
       font-size: 1.5rem;
     }
-  #message > li:nth-child(odd) {
+  .Chatbox #message-container #message > li:nth-child(odd) {
       background: grey;
       font-size: 1.5rem;
     }
-  #message-container {
+  .Chatbox #message-container {
       border: 1px solid #9400d3;
       flex-grow: 1;
       overflow-y:auto;
