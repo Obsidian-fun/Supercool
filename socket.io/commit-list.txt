@@ -22,5 +22,17 @@ Exec this in vim, once done,
 git add .
 git commit -m "Upgrade background image to a 4k high resolution image of space"
 
+Pain points:
+1. Text does not automatically scroll to bottom when it reaches end of text box. [Resolved]
+2. Last message requires padding-bottom otherwise it cannot be seen. [Resolved]
+3. For every new instance created, the socket creates an extra socket- on the second window, node creates 2 sockets, on the third window node creates 3 sockets. [Resolved, remove it from the get request]
+4. Stop Double, triple, etc. login for the same account.
+
+
+
+
+
+
+
 
 

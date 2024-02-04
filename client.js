@@ -11,7 +11,7 @@ const socket = io();   //URL, { autoConnect: false });
 const input = document.querySelector('.Chatbox #message-container #message-input');
 const form = document.querySelector('.Chatbox #message-container #form');
 const message = document.querySelector('.Chatbox #message-container #message');
-
+const messageBody = document.querySelector('.Chatbox #message-container');
 
 // Socket on connection,
 socket.on('connection', (msg) =>{
@@ -30,13 +30,13 @@ form.addEventListener('submit', (e) => {
 // For receiveing messages,
 socket.on('chat message', (msg) => {
   display(msg);
-  window.scrollTo(0, document.querySelector('#message-container').scrollHeight);
+  messageBody.scrollTo(0, messageBody.scrollHeight);
 });
 
 socket.on('disconnect' , (msg)=>{
   const el=document.createElement('li');
   el.innerText = `See ya later amigo 👋`;
-  document.querySelector('ul').append(el);
+  document.querySelector('.Chatbox #message-container #message').append(el);
 });
 
 

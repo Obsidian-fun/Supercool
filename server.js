@@ -131,22 +131,24 @@ app.get('/chatroom', (req, res)=> {
 // For socket on make sure the name of the socket and the function variables match on both the server and client side
   res.sendFile(join(__dirname,'chatroom.html'));
 
-  io.on('connection', (socket) =>{
   
-    io.emit('connection', `User has connected at ${socket.id}`);
+});
+
+io.on('connection', (socket) =>{
+    
     console.log(`User has connected at ${socket.id}`);
-
-    socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
+    
+    socket.on('chat message', (msg)=> {
+      io.emit('chat message',msg);
     });
-
+   
     socket.on('disconnect', (msg) => {
     console.log(socket.id, 'User disconnected');
     });
-
   });
 
-});
+
+
 
 server.listen(port, ()=> {
   console.log(`Server listening on ${port}`);
