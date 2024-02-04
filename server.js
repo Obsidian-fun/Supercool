@@ -3,7 +3,7 @@ const app = express();
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import bcrypt from 'bcryptjs'; // Find out right ES6 import import { v4 as uuid } from 'uuid';
+import bcrypt from 'bcryptjs'; 
 import 'dotenv/config';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -28,7 +28,6 @@ app.use(bodyParser.json())
 
 // setting the default path
 const __dirname = dirname(fileURLToPath(import.meta.url));
-console.log(uuid());
 console.log(__dirname);
 
 // serve static pages,
@@ -69,7 +68,7 @@ app.post('/register', (req, res)=>{
         message:err,
       })
     } else {
-      connection.query(`INSERT INTO users (id, username, password, registered) VALUES (?, ?, ?, NOW());`,[uuidv4(), username, hash], 
+      connection.query(`INSERT INTO users (id, username, password, registered) VALUES (?, ?, ?, NOW());`,[uuid(), username, hash], 
       (err, result) => {
         if (err) {
           return res.status(400).send({
