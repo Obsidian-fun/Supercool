@@ -9,6 +9,9 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import mysql from 'mysql';
 
+import {uuid,cryptToken} from './systemToken/token.js';
+
+
 // socket.io imports,
 import { Server } from 'socket.io';
 import { createServer } from 'http';  // Routing
@@ -25,6 +28,7 @@ app.use(bodyParser.json())
 
 // setting the default path
 const __dirname = dirname(fileURLToPath(import.meta.url));
+console.log(uuid());
 console.log(__dirname);
 
 // serve static pages,
@@ -57,7 +61,7 @@ app.post('/register', (req, res)=>{
   let { username, email, password } = req.body;
   
   const user = { name:username };
-  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+//  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 
   bcrypt.hash(password, 10, (err, hash)=> {
     if(err){

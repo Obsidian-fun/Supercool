@@ -1,9 +1,5 @@
 // This is the client side code
 
-// const username = window.prompt('Enter your username?');
-//localStorage.setItem('username',username);
-//const user = localStorage.getItem('username');
-
 const URL = "http://localhost:3890";
 const socket = io();   //URL, { autoConnect: false });
 
@@ -46,6 +42,4 @@ function display(message) {
   document.querySelector('.Chatbox #message-container #message').append(el);
 }
 
-// check out differences between textContent, innerHTML and innerText at https://builtin.com/software-engineering-perspectives/innerhtml-vs-innertext
         
-// https://sparrowshare.com/app/listings/02eb6d47-0d42-4924-b552-5b0c3adb3d09
