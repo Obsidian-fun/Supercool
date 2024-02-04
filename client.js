@@ -10,22 +10,22 @@ const message = document.querySelector('.Chatbox #message-container #message');
 const messageBody = document.querySelector('.Chatbox #message-container');
 
 // Socket on connection,
-socket.on('connection', (msg) =>{
-  display(msg);
-});
+//socket.on('connection', (user) =>{
+//  display(msg);
+//});
 
 // For sending messages,
 form.addEventListener('submit', (e) => {
   e.preventDefault();
     if (input.value) {
-        socket.emit('chat message', input.value);
+        socket.emit('chat message',input.value);
         input.value = '';
     }
 });
 
-// For receiveing messages,
-socket.on('chat message', (msg) => {
-  display(msg);
+// For receiving messages,
+socket.on('chat message', (text)=> {
+  display(text);
   messageBody.scrollTo(0, messageBody.scrollHeight);
 });
 
@@ -38,7 +38,7 @@ socket.on('disconnect' , (msg)=>{
 
 function display(message) {
   const el = document.createElement('li');
-  el.innerText = `${message}`;
+  el.innerText = message;
   document.querySelector('.Chatbox #message-container #message').append(el);
 }
 

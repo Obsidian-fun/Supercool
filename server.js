@@ -84,7 +84,6 @@ app.post('/register', (req, res)=>{
   });
 });
 
-
 // All the POST requests, to work with user credentials,
 app.post('/login', async (req, res)=> {
   const {username, password} = req.body;
@@ -113,7 +112,6 @@ app.post('/login', async (req, res)=> {
         //     const accessToken = jwt.sign({username}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '7d'});
             // UPDATE login time of user,
                connection.query(`UPDATE users SET last_login=NOW() WHERE id=?;`, [result[0].id,]);
-          
               return res.status(200).send({
                 message:"Logged In!",
                 user: result[0],
@@ -128,28 +126,25 @@ app.post('/login', async (req, res)=> {
   );
 });
 
-
 // Secret route, only logged in users can fetch these pages,
 app.get('/chatroom', (req, res)=> {
-// For socket on make sure the name of the socket and the function variables match on both the server and client side
-  res.sendFile(join(__dirname,'chatroom.html'));
-
-  
+  res.sendFile(join(__dirname,'chatroom.html'));  
 });
 
 io.on('connection', (socket) =>{
-    
-    console.log(`User has connected at ${socket.id}`);
+
+    const user = "Something" // Change this variable
+    console.log(`${displayName[0]} has connected at ${socket.id}`);
     
     socket.on('chat message', (msg)=> {
-      io.emit('chat message',msg);
+      io.emit('chat message',`${user}:${msg}`);
+      console.log(`${user}:${msg}`);
     });
    
     socket.on('disconnect', (msg) => {
     console.log(socket.id, 'User disconnected');
     });
   });
-
 
 
 
