@@ -84,6 +84,8 @@ app.post('/register', (req, res)=>{
   });
 });
 
+const usersLoggedIn=[];
+
 // All the POST requests, to work with user credentials,
 app.post('/login', async (req, res)=> {
   const {username, password} = req.body;
@@ -110,6 +112,7 @@ app.post('/login', async (req, res)=> {
               }
               if(bResult) {
         //     const accessToken = jwt.sign({username}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '7d'});
+              usersLoggedIn.push(username);
             // UPDATE login time of user,
                connection.query(`UPDATE users SET last_login=NOW() WHERE id=?;`, [result[0].id,]);
               return res.status(200).send({
@@ -133,12 +136,15 @@ app.get('/chatroom', (req, res)=> {
 
 io.on('connection', (socket) =>{
 
-    const user = "Something" // Change this variable
-    console.log(`${displayName[0]} has connected at ${socket.id}`);
-    
+    const user=usersLoggedIn[usersLoggedIn.length-1];
+    console.log(user+` has connected at ${socket.id}`);
+
+    socket.onAny((event, ...args)=>{    // Catch all socket events
+      console.log(event, args);
+    });
+
     socket.on('chat message', (msg)=> {
       io.emit('chat message',`${user}:${msg}`);
-      console.log(`${user}:${msg}`);
     });
    
     socket.on('disconnect', (msg) => {
