@@ -59,7 +59,7 @@ app.get('/signup', (req,res)=> {
 app.post('/register', (req, res)=>{
   let { username, email, password } = req.body;
   
-  const user = { name:username };
+//  const user = { name:username };   JWT token auth, DELETE when completed Session token auth instead
 //  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 
   bcrypt.hash(password, 10, (err, hash)=> {
@@ -135,7 +135,6 @@ app.get('/chatroom', (req, res)=> {
 });
 
 io.on('connection', (socket) =>{
-
     const user=usersLoggedIn[usersLoggedIn.length-1];
     console.log(user+` has connected at ${socket.id}`);
 
