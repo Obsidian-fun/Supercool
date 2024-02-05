@@ -59,8 +59,6 @@ app.get('/signup', (req,res)=> {
 app.post('/register', (req, res)=>{
   let { username, email, password } = req.body;
   
-//  const user = { name:username };   JWT token auth, DELETE when completed Session token auth instead
-//  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 
   bcrypt.hash(password, 10, (err, hash)=> {
     if(err){
@@ -84,7 +82,6 @@ app.post('/register', (req, res)=>{
   });
 });
 
-const usersLoggedIn=[];
 
 // All the POST requests, to work with user credentials,
 app.post('/login', async (req, res)=> {
@@ -112,7 +109,6 @@ app.post('/login', async (req, res)=> {
               }
               if(bResult) {
         //     const accessToken = jwt.sign({username}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '7d'});
-              usersLoggedIn.push(username);
             // UPDATE login time of user,
                connection.query(`UPDATE users SET last_login=NOW() WHERE id=?;`, [result[0].id,]);
               return res.status(200).send({
@@ -135,7 +131,7 @@ app.get('/chatroom', (req, res)=> {
 });
 
 io.on('connection', (socket) =>{
-    const user=usersLoggedIn[usersLoggedIn.length-1];
+    const user= "somebody";
     console.log(user+` has connected at ${socket.id}`);
 
     socket.onAny((event, ...args)=>{    // Catch all socket events
@@ -150,7 +146,6 @@ io.on('connection', (socket) =>{
     console.log(socket.id, 'User disconnected');
     });
   });
-
 
 
 server.listen(port, ()=> {
