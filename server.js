@@ -23,6 +23,11 @@ const io= new Server(server);
 class user{
   constructor(){
     this.hashmap = new HashMap();
+    this.usersLoggedIn = [];
+  }
+  loggedIn(user){
+     this.user = user;
+     return usersLoggedIn.push(this.user);
   }
   get(key) {
     return this.hashmap.get(key);
@@ -46,6 +51,7 @@ class user{
     this.hashmap.clear();
   }
 }
+
 
 
 // Connecting server to listen on a port,
