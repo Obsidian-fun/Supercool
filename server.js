@@ -1,5 +1,4 @@
 import express from 'express';
-const app = express();
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -16,6 +15,7 @@ import {uuid,cryptToken} from './systemToken/token.js';
 import { Server } from 'socket.io';
 import { createServer } from 'http';  // Routing
 
+const app = express();
 const server=createServer(app);
 const io= new Server(server);
 
@@ -23,15 +23,15 @@ const io= new Server(server);
 class user{
   constructor(){
     this.hashmap = new HashMap();
-    this.usersLoggedIn = [];
+    this.usersLogged = [];
   }
   loggedIn(user){
      this.user = user;
-     return usersLoggedIn.push(this.user);
+     this.usersLogged.push(this.user);
   }
   loggedOut(user){
      this.user = user;
-     return usersLoggedIn.pop(this.user);
+     this.usersLogged.pop(this.user);
   }
   get(key) {
     return this.hashmap.get(key);
@@ -58,10 +58,9 @@ class user{
 
 function createInstance(username) {
   const log = new user();
-  log.loggedIn(username);
-
+  let name = log.loggedIn(username);
+  console.log(name);
 }
-
 
 // Connecting server to listen on a port,
 let port = process.env.PORT || 3000;
@@ -151,7 +150,7 @@ app.post('/login', async (req, res)=> {
               }
               if(bResult) {
                 // UPDATE login time of user,
-               connection.query(`UPDATE users SET last_login=NOW() WHERE id=?;`, [result[0].id,]);
+               connection.query(`UPDATE users SET last_login=NOW() WHERE id=?;`, [result[0].id,]);                 createInstance(req.body.username);
               return res.status(200).send({
                 message:"Logged In!",
                 user: result[0],
@@ -173,7 +172,9 @@ app.get('/chatroom', (req, res)=> {
 
 io.on('connection', (socket) =>{
 
+
     console.log(`Someone has connected at ${socket.id}`);
+    
 
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
