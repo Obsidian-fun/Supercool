@@ -8,7 +8,7 @@ import 'dotenv/config';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import mysql from 'mysql';
-
+import HashMap from 'hashmap';
 import {uuid,cryptToken} from './systemToken/token.js';
 
 
@@ -18,6 +18,34 @@ import { createServer } from 'http';  // Routing
 
 const server=createServer(app);
 const io= new Server(server);
+
+
+class user{
+  constructor(){
+    this.hashmap = new HashMap();
+  }
+  get(key) {
+    return this.hashmap.get(key);
+  }
+  set(key,value) {
+    this.hashmap.set(key, value);
+  }   
+  search(key) {
+    return this.hashmap.search(key);  
+  }
+  delete(key) {
+    this.hashmap.delete(key);
+  }
+  has(key) {
+    return this.hashmap.has(key);
+  }
+  size() {
+    return this.hashmap.size();
+  }
+  clear(key) {
+    this.hashmap.clear();
+  }
+}
 
 
 // Connecting server to listen on a port,
@@ -32,7 +60,6 @@ console.log(__dirname);
 
 // serve static pages,
 app.use(express.static(__dirname));
-
 
 // connecting database to server,
 const connection = mysql.createConnection({
