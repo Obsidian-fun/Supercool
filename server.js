@@ -29,6 +29,10 @@ class user{
      this.user = user;
      return usersLoggedIn.push(this.user);
   }
+  loggedOut(user){
+     this.user = user;
+     return usersLoggedIn.pop(this.user);
+  }
   get(key) {
     return this.hashmap.get(key);
   }
@@ -52,6 +56,11 @@ class user{
   }
 }
 
+function createInstance(username) {
+  const log = new user();
+  log.loggedIn(username);
+
+}
 
 
 // Connecting server to listen on a port,
@@ -141,8 +150,7 @@ app.post('/login', async (req, res)=> {
               });
               }
               if(bResult) {
-        //     const accessToken = jwt.sign({username}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '7d'});
-            // UPDATE login time of user,
+                // UPDATE login time of user,
                connection.query(`UPDATE users SET last_login=NOW() WHERE id=?;`, [result[0].id,]);
               return res.status(200).send({
                 message:"Logged In!",
@@ -164,8 +172,8 @@ app.get('/chatroom', (req, res)=> {
 });
 
 io.on('connection', (socket) =>{
-    const user= "somebody";
-    console.log(user+` has connected at ${socket.id}`);
+
+    console.log(`Someone has connected at ${socket.id}`);
 
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
@@ -184,5 +192,4 @@ io.on('connection', (socket) =>{
 server.listen(port, ()=> {
   console.log(`Server listening on ${port}`);
 });
-
 
