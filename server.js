@@ -23,15 +23,6 @@ const io= new Server(server);
 class user{
   constructor(){
     this.hashmap = new HashMap();
-    this.usersLogged = [];
-  }
-  loggedIn(user){
-     this.user = user;
-     this.usersLogged.push(this.user);
-  }
-  loggedOut(user){
-     this.user = user;
-     this.usersLogged.pop(this.user);
   }
   get(key) {
     return this.hashmap.get(key);
@@ -56,11 +47,6 @@ class user{
   }
 }
 
-function createInstance(username) {
-  const log = new user();
-  let name = log.loggedIn(username);
-  console.log(name);
-}
 
 // Connecting server to listen on a port,
 let port = process.env.PORT || 3000;
@@ -100,7 +86,6 @@ app.get('/signup', (req,res)=> {
 app.post('/register', (req, res)=>{
   let { username, email, password } = req.body;
   
-
   bcrypt.hash(password, 10, (err, hash)=> {
     if(err){
       res.status(500).send({
@@ -127,7 +112,7 @@ app.post('/register', (req, res)=>{
 // All the POST requests, to work with user credentials,
 app.post('/login', async (req, res)=> {
   const {username, password} = req.body;
-  
+   
   // check for validity,
   connection.query(`SELECT * FROM users WHERE username=?; `, [req.body.username],
     (err, result) =>{
@@ -150,7 +135,7 @@ app.post('/login', async (req, res)=> {
               }
               if(bResult) {
                 // UPDATE login time of user,
-               connection.query(`UPDATE users SET last_login=NOW() WHERE id=?;`, [result[0].id,]);                 createInstance(req.body.username);
+               connection.query(`UPDATE users SET last_login=NOW() WHERE id=?;`, [result[0].id,]);
               return res.status(200).send({
                 message:"Logged In!",
                 user: result[0],
