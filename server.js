@@ -20,11 +20,14 @@ const server=createServer(app);
 const io= new Server(server);
 
 
-class user{
+// Creating a class to store usernames with ids in a hashmap,
+
+class User{
   constructor(){
     this.hashmap = new HashMap();
   }
   get(key) {
+    console.log(this.hashmap.get(key));
     return this.hashmap.get(key);
   }
   set(key,value) {
@@ -46,7 +49,7 @@ class user{
     this.hashmap.clear();
   }
 }
-
+const value = new User();
 
 // Connecting server to listen on a port,
 let port = process.env.PORT || 3000;
@@ -109,8 +112,9 @@ app.post('/register', (req, res)=>{
 });
 
 
+
 // All the POST requests, to work with user credentials,
-app.post('/login', async (req, res)=> {
+app.post('/login', (req, res)=> {
   const {username, password} = req.body;
    
   // check for validity,
@@ -136,11 +140,12 @@ app.post('/login', async (req, res)=> {
               if(bResult) {
                 // UPDATE login time of user,
                connection.query(`UPDATE users SET last_login=NOW() WHERE id=?;`, [result[0].id,]);
+               value.set('1',username);
               return res.status(200).send({
                 message:"Logged In!",
                 user: result[0],
               });          
-             }          
+          }          
        return res.status(400).send({
          message: "Incorrect username or password!",
        });
@@ -157,10 +162,8 @@ app.get('/chatroom', (req, res)=> {
 
 io.on('connection', (socket) =>{
 
-
     console.log(`Someone has connected at ${socket.id}`);
-    
-
+    value.get('1');
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
     });
