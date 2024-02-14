@@ -25,9 +25,18 @@ const io= new Server(server);
 class User{
   constructor(){
     this.hashmap = new HashMap();
+    this.array = [];
+  }
+  push(name){
+    this.array.push(name);
+  }
+  pop(){
+    this.array.pop();
+  }
+  showArray(){
+    console.log(this.array);
   }
   get(key) {
-    console.log(this.hashmap.get(key));
     return this.hashmap.get(key);
   }
   set(key,value) {
@@ -140,7 +149,8 @@ app.post('/login', (req, res)=> {
               if(bResult) {
                 // UPDATE login time of user,
                connection.query(`UPDATE users SET last_login=NOW() WHERE id=?;`, [result[0].id,]);
-               value.set('1',username);
+               value.push(username);
+               
               return res.status(200).send({
                 message:"Logged In!",
                 user: result[0],
@@ -162,18 +172,22 @@ app.get('/chatroom', (req, res)=> {
 
 io.on('connection', (socket) =>{
 
-    console.log(`Someone has connected at ${socket.id}`);
-    value.get('1');
+    value.set(socket.id,value.array[0]); 
+    let user= value.get(socket.id);
+
+    console.log(`${user} connected at ${socket.id}`);
+    value.pop();
+
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
     });
 
     socket.on('chat message', (msg)=> {
-      io.emit('chat message',`${user}:${msg}`);
+      io.emit('chat message', user, msg);
     });
    
     socket.on('disconnect', (msg) => {
-    console.log(socket.id, 'User disconnected');
+    console.log(value.get(socket.id), ' disconnected');
     });
   });
 

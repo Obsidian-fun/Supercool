@@ -24,8 +24,9 @@ form.addEventListener('submit', (e) => {
 });
 
 // For receiving messages,
-socket.on('chat message', (text)=> {
-  display(text);
+socket.on('chat message', (user, text)=> {
+  display(user, text);
+ // console.log(`${user}: ${text}`);
   messageBody.scrollTo(0, messageBody.scrollHeight);
 });
 
@@ -36,9 +37,9 @@ socket.on('disconnect' , (msg)=>{
 });
 
 
-function display(message) {
+function display(name, message) {
   const el = document.createElement('li');
-  el.innerText = message;
+  el.innerText = `${name}: ${message}`;
   document.querySelector('.Chatbox #message-container #message').append(el);
 }
 
