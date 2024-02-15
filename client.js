@@ -1,16 +1,11 @@
 // This is the client side code
 
 const URL = "http://localhost:3890";
-const socket = io({
-  //URL, { autoConnect: false });
-  //  auth:{
-  //    token:
-  //  }
-});
-  
-  
-  
-console.log(socket);
+const socket = io(URL,
+  {
+    autoConnect: false
+  });
+
 
 const input = document.querySelector('.Chatbox #message-container #message-input');
 const form = document.querySelector('.Chatbox #message-container #form');

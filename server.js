@@ -176,9 +176,7 @@ io.on('connection', (socket) =>{
     let user= value.get(socket.id);
     value.pop();
 
-    socket.handshake.auth = user;
     console.log(`${user} connected on ${socket.handshake.time}`);
-
 
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
