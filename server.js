@@ -174,10 +174,10 @@ io.on('connection', (socket) =>{
 
     value.set(socket.id,value.array[0]); 
     let user= value.get(socket.id);
+     value.pop();
 
     console.log(`${user} connected at ${socket.id}`);
-    value.pop();
-
+ 
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
     });

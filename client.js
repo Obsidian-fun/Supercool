@@ -10,9 +10,9 @@ const message = document.querySelector('.Chatbox #message-container #message');
 const messageBody = document.querySelector('.Chatbox #message-container');
 
 // Socket on connection,
-//socket.on('connection', (user) =>{
-//  display(msg);
-//});
+socket.on('connection', (user) =>{
+    onlineUser(user);  
+});
 
 // For sending messages,
 form.addEventListener('submit', (e) => {
@@ -26,7 +26,6 @@ form.addEventListener('submit', (e) => {
 // For receiving messages,
 socket.on('chat message', (user, text)=> {
   display(user, text);
- // console.log(`${user}: ${text}`);
   messageBody.scrollTo(0, messageBody.scrollHeight);
 });
 
@@ -43,4 +42,10 @@ function display(name, message) {
   document.querySelector('.Chatbox #message-container #message').append(el);
 }
 
-        
+function onlineUser(name) {
+  const onlinePerson = document.createElement('ul');
+  onlinePerson.innerText = name;
+  document.querySelector('.Container .Users').append(onlinePerson);
+}
+
+
