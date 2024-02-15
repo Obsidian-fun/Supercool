@@ -174,10 +174,12 @@ io.on('connection', (socket) =>{
 
     value.set(socket.id,value.array[0]); 
     let user= value.get(socket.id);
-     value.pop();
+    value.pop();
 
-    console.log(`${user} connected at ${socket.id}`);
- 
+    socket.handshake.auth = user;
+    console.log(`${user} connected on ${socket.handshake.time}`);
+
+
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
     });

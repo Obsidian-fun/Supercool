@@ -1,8 +1,16 @@
 // This is the client side code
 
 const URL = "http://localhost:3890";
-const socket = io();   //URL, { autoConnect: false });
-
+const socket = io({
+  //URL, { autoConnect: false });
+  //  auth:{
+  //    token:
+  //  }
+});
+  
+  
+  
+console.log(socket);
 
 const input = document.querySelector('.Chatbox #message-container #message-input');
 const form = document.querySelector('.Chatbox #message-container #form');
@@ -10,9 +18,11 @@ const message = document.querySelector('.Chatbox #message-container #message');
 const messageBody = document.querySelector('.Chatbox #message-container');
 
 // Socket on connection,
-socket.on('connection', (user) =>{
-    onlineUser(user);  
+socket.on('connect', ()=>{
+  console.log(`Welcome to the Chat! `);
 });
+
+
 
 // For sending messages,
 form.addEventListener('submit', (e) => {
@@ -44,8 +54,8 @@ function display(name, message) {
 
 function onlineUser(name) {
   const onlinePerson = document.createElement('ul');
-  onlinePerson.innerText = name;
-  document.querySelector('.Container .Users').append(onlinePerson);
+  onlinePerson.innerText = `${name}`;
+  document.querySelector('.Container .Users').appendChild(onlinePerson);
 }
 
 
