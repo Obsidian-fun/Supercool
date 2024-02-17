@@ -33,11 +33,11 @@ class User{
   pop(){
     this.array.pop();
   }
-  indexOf(name){
-    this.array.indexOf();
+  splice(name){
+    this.array.splice(this.array.indexOf(name),1);
   }
   showArray(){
-    console.log(this.array);
+    return this.array;
   }
   get(key) {
     return this.hashmap.get(key);
@@ -172,14 +172,14 @@ app.post('/login', (req, res)=> {
 
 // Secret route, only logged in users can fetch these pages,
 app.get('/chatroom', (req, res)=> {
-  res.render(join(__dirname,'chatroom.ejs'));  
+  res.render(join(__dirname,'chatroom.ejs'),{username: value.showArray()});  
 });
 
 io.on('connection', (socket) =>{
 
     value.set(socket.id,value.array[0]); 
     let user= value.get(socket.id);
-
+  
     console.log(`${user} connected on ${socket.handshake.time}`);
     
     io.emit('welcome',user);
@@ -193,13 +193,11 @@ io.on('connection', (socket) =>{
     });
    
     socket.on('disconnect', (msg) => {
-    console.log(value.get(socket.id), ' disconnected');
+      value.splice(user);
+      value.delete(socket.id);
+      console.log(value.get(socket.id), ' disconnected');
     });
 
-    function logOff(){
-      value.indexOf(user);
-      
-    }
 
   });
 
