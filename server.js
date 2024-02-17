@@ -33,6 +33,9 @@ class User{
   pop(){
     this.array.pop();
   }
+  indexOf(name){
+    this.array.indexOf();
+  }
   showArray(){
     console.log(this.array);
   }
@@ -63,6 +66,8 @@ const value = new User();
 // Connecting server to listen on a port,
 let port = process.env.PORT || 3000;
 
+app.set('view engine','EJS');
+
 app.use(cors('http://localhost:${process.env.PORT}')) // Enable ALL cross origin sharing ( DANGEROUS - PLEASE CHANGE IN PRODUCTION)
 app.use(bodyParser.json())
 
@@ -79,7 +84,7 @@ const connection = mysql.createConnection({
   user : process.env.DB_USER,
   database : process.env.DB_NAME,
   password : process.env.DB_PASSWORD,
-  charset : "utf8mb4"
+  charset : "utf8mb4"           // Fun emojis
 });
 connection.connect();
 
@@ -167,16 +172,17 @@ app.post('/login', (req, res)=> {
 
 // Secret route, only logged in users can fetch these pages,
 app.get('/chatroom', (req, res)=> {
-  res.sendFile(join(__dirname,'chatroom.html'));  
+  res.render(join(__dirname,'chatroom.ejs'));  
 });
 
 io.on('connection', (socket) =>{
 
     value.set(socket.id,value.array[0]); 
     let user= value.get(socket.id);
-    value.pop();
 
     console.log(`${user} connected on ${socket.handshake.time}`);
+    
+    io.emit('welcome',user);
 
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
@@ -189,6 +195,12 @@ io.on('connection', (socket) =>{
     socket.on('disconnect', (msg) => {
     console.log(value.get(socket.id), ' disconnected');
     });
+
+    function logOff(){
+      value.indexOf(user);
+      
+    }
+
   });
 
 
