@@ -2,17 +2,19 @@
 // This was taken from the example provided by the official socket.io library documentation, to implement session management in sockets. For reference, you can check out the code at,
 // https://socket.io/get-started/private-messaging-part-2
 
+import HashMap from 'hashmap';
 
-class SessionStore(){
-  findSession(id);
-  saveSession(id, session);
+
+export class SessionStore{
+  findSession(id) {}
+  saveSession(id, session) {}
   findAllSessions() {}
 }
 
-class InMemorySessionStore extends SessionStore {
+export class InMemorySessionStore extends SessionStore {
   constructor() {
     super();
-    this.sessions = new Map();
+    this.sessions = new HashMap();
   }
 
   findSession(id){
@@ -27,9 +29,6 @@ class InMemorySessionStore extends SessionStore {
     return [...this.sessions.values()];
   }
 }
-
-const socket = new SessionStore();
-
 
 
 

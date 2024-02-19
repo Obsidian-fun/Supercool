@@ -9,7 +9,7 @@ import bodyParser from 'body-parser';
 import mysql from 'mysql';
 import HashMap from 'hashmap';
 import {uuid,cryptToken} from './systemToken/token.js';
-
+import {SessionStore,InMemorySessionStore} from './sessionStore.js';
 
 // socket.io imports,
 import { Server } from 'socket.io';
