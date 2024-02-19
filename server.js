@@ -182,8 +182,22 @@ io.on('connection', (socket) =>{
  
     let user= value.get(socket.id);
     console.log(`${user} connected on ${socket.handshake.time}`);
-
     console.log(value.array);
+
+    const sessionStore = new InMemorySession();    
+    io.use((socket, next)=>{
+      const sessionID = socket.handshake.auth.sessionID;
+      if (sessionID){
+        const session =  sessionStore.findSession(sessionID);
+        if (session){
+          socket.sessionID = sessionID;
+          socket.userID = sessionID.userID;
+          socket.username = session.username;
+          return next();
+        }
+      }
+    });
+
 
 
     socket.emit('users',value.array);
