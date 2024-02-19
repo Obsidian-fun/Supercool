@@ -177,12 +177,17 @@ app.get('/chatroom', (req, res)=> {
 
 io.on('connection', (socket) =>{
 
-    value.set(socket.id,value.array[0]); 
+    // Get the socket id, and the last user that connected, from value.array ,
+    value.set(socket.id,value.array[value.array.length-1]); 
+ 
     let user= value.get(socket.id);
-  
     console.log(`${user} connected on ${socket.handshake.time}`);
-    
-    io.emit('welcome',user);
+
+    console.log(value.array);
+
+
+    socket.emit('users',value.array);
+    socket.broadcast.emit('user connected',value.array);
 
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
@@ -193,9 +198,9 @@ io.on('connection', (socket) =>{
     });
    
     socket.on('disconnect', (msg) => {
+      console.log(value.get(socket.id), ' disconnected');
       value.splice(user);
       value.delete(socket.id);
-      console.log(value.get(socket.id), ' disconnected');
     });
 
 

@@ -3,9 +3,23 @@
 const URL = "http://localhost:3890";
 const socket = io(
   {
-//    autoConnect: false
+//     autoConnect: false,
+ //   socket.handshake.auth = sessionStorage.name
   });
 
+
+
+
+function username(){
+  const displayName= window.prompt("Enter your Display Name","");
+
+  if(displayName.toString().length < 3){
+    alert("Username should be atleast 3 letters");
+    username();
+  } else {
+      sessionStorage.setItem("name",displayName);
+  }
+}
 
 const input = document.querySelector('.Chatbox #message-container #message-input');
 const form = document.querySelector('.Chatbox #message-container #form');
@@ -14,12 +28,22 @@ const messageBody = document.querySelector('.Chatbox #message-container');
 
 // Socket on connection,
 
-socket.on('welcome', (user)=>{
-  console.log(`welcome ${user}`);
-  online(user);
+socket.on('connect', ()=>{
+    console.log(`Welcome welcome`);
+  });
+
+
+// Display list of users,
+socket.on('users',(users)=>{
+  users.forEach((user)=>{
+    online(user);
+  });
 });
 
-socket.emit('connection');
+// Display connected user to other users,
+socket.on('user connected',(users)=>{
+      online(users[users.length-1]);
+});
 
 
 // For sending messages,
