@@ -7,7 +7,7 @@ const socket = io(
  //   socket.handshake.auth = sessionStorage.name
   });
 
-
+/* Delete this function later
 function username(){
   const displayName= window.prompt("Enter your Display Name","");
 
@@ -18,7 +18,7 @@ function username(){
       sessionStorage.setItem("name",displayName);
   }
 }
-
+*/
 const input = document.querySelector('.Chatbox #message-container #message-input');
 const form = document.querySelector('.Chatbox #message-container #form');
 const message = document.querySelector('.Chatbox #message-container #message');
@@ -32,6 +32,8 @@ socket.on('connect', ()=>{
   });
 
 // Session Management,
+
+//socket.connect();
 
 socket.on('session', ({sessionID, userID})=>{
   // using auth, to store session ID,

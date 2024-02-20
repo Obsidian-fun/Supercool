@@ -171,36 +171,39 @@ app.post('/login', (req, res)=> {
 
 // Secret route, only logged in users can fetch these pages,
 app.get('/chatroom', (req, res)=> {
-  res.render(join(__dirname,'chatroom.ejs'),{username: value.showArray()});  
+  res.render(join(__dirname,'chatroom.ejs'));  
 });
 
 import {InMemorySessionStore} from './sessionStore.js';
 const sessionStore = new InMemorySessionStore();    
-
+/*
 io.use((socket, next)=>{
       const sessionID = socket.handshake.auth.sessionID;
-      if (sessionID){
+      if (sessionID != undefined){
         const session =  sessionStore.findSession(sessionID);
+        console.log(session);
+        typeof(session);
         if (session){
-          socket.sessionID = sessionID;
-          socket.userID = sessionID.userID;
-          socket.username = session.username;
+        //  socket.handshake.auth.sessionID = sessionID;
+        //  socket.handshake.auth.userID = sessionID.userID;
+        //  socket.handshake.auth.username = session.username;
           return next();
         }
+      } else {
+          const username = value.get(socket.id);
+          if (!username) {
+            return next(new Error("invalid username"));
+          }
+        // Creating new session  
+        socket.handshake.auth.username = username;
+        socket.handshake.auth.sessionID = uuid();
+        socket.handshake.auth.userID = uuid();   
+        console.log(socket.handshake.auth.username, socket.handshake.auth.sessionID);
+        next();
       }
-    const username = value.get(socket.id);
-    if (!username) {
-      return next(new Error("invalid username"));
-      }
-    // Creating new session  
-    socket.handshake.auth.username = username;
-    socket.handshake.auth.sessionID = uuid();
-    socket.handshake.auth.userID = uuid();   
-    console.log(socket.handshake.auth.username, socket.handshake.auth.sessionID);
-    next();
 });
 
-
+*/
 io.on('connection', (socket) =>{
     // Get the socket id, and the last user that connected, from value.array ,
     value.set(socket.id,value.array[value.array.length-1]); 
@@ -223,7 +226,6 @@ io.on('connection', (socket) =>{
    
     socket.emit('users',value.array);
     socket.broadcast.emit('user connected',value.array);
-
 
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
