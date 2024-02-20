@@ -9,7 +9,6 @@ import bodyParser from 'body-parser';
 import mysql from 'mysql';
 import HashMap from 'hashmap';
 import {uuid,cryptToken} from './systemToken/token.js';
-import {SessionStore,InMemorySessionStore} from './sessionStore.js';
 
 // socket.io imports,
 import { Server } from 'socket.io';
@@ -175,17 +174,10 @@ app.get('/chatroom', (req, res)=> {
   res.render(join(__dirname,'chatroom.ejs'),{username: value.showArray()});  
 });
 
-io.on('connection', (socket) =>{
+import {InMemorySessionStore} from './sessionStore.js';
+const sessionStore = new InMemorySessionStore();    
 
-    // Get the socket id, and the last user that connected, from value.array ,
-    value.set(socket.id,value.array[value.array.length-1]); 
- 
-    let user= value.get(socket.id);
-    console.log(`${user} connected on ${socket.handshake.time}`);
-    console.log(value.array);
-
-    const sessionStore = new InMemorySession();    
-    io.use((socket, next)=>{
+io.use((socket, next)=>{
       const sessionID = socket.handshake.auth.sessionID;
       if (sessionID){
         const session =  sessionStore.findSession(sessionID);
@@ -196,12 +188,42 @@ io.on('connection', (socket) =>{
           return next();
         }
       }
+    const username = value.get(socket.id);
+    if (!username) {
+      return next(new Error("invalid username"));
+      }
+    // Creating new session  
+    socket.handshake.auth.username = username;
+    socket.handshake.auth.sessionID = uuid();
+    socket.handshake.auth.userID = uuid();   
+    console.log(socket.handshake.auth.username, socket.handshake.auth.sessionID);
+    next();
+});
+
+
+io.on('connection', (socket) =>{
+    // Get the socket id, and the last user that connected, from value.array ,
+    value.set(socket.id,value.array[value.array.length-1]); 
+ 
+    let user= value.get(socket.id);
+    console.log(`${user} connected on ${socket.handshake.time}`);
+    console.log(value.array);
+
+    // Creating session persistance in hashmap,
+    sessionStore.saveSession(socket.sessionID, {
+      userID: socket.handshake.auth.userID,
+      username: socket.handshake.auth.username,
+      connected: true,
     });
-
-
-
+      
+    socket.emit('session',{
+      sessionID: socket.sessionID,
+      userID: socket.userID,
+    });
+   
     socket.emit('users',value.array);
     socket.broadcast.emit('user connected',value.array);
+
 
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
@@ -216,7 +238,6 @@ io.on('connection', (socket) =>{
       value.splice(user);
       value.delete(socket.id);
     });
-
 
   });
 

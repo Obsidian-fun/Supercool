@@ -8,8 +8,6 @@ const socket = io(
   });
 
 
-
-
 function username(){
   const displayName= window.prompt("Enter your Display Name","");
 
@@ -26,11 +24,22 @@ const form = document.querySelector('.Chatbox #message-container #form');
 const message = document.querySelector('.Chatbox #message-container #message');
 const messageBody = document.querySelector('.Chatbox #message-container');
 
+
 // Socket on connection,
 
 socket.on('connect', ()=>{
     console.log(`Welcome welcome`);
   });
+
+// Session Management,
+
+socket.on('session', ({sessionID, userID})=>{
+  // using auth, to store session ID,
+  socket.auth = {sessionID};
+  console.log(socket.auth);
+  window.localStorage.setItem("sessionID",sessionID);
+  socket.userID = userID;
+});
 
 
 // Display list of users,
