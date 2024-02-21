@@ -3,38 +3,41 @@
 const URL = "http://localhost:3890";
 const socket = io(
   {
-//     autoConnect: false,
+     autoConnect: false,
  //   socket.handshake.auth = sessionStorage.name
+      transports: ["websockets","polling"],
   });
 
-/* Delete this function later
-function username(){
-  const displayName= window.prompt("Enter your Display Name","");
-
-  if(displayName.toString().length < 3){
-    alert("Username should be atleast 3 letters");
-    username();
-  } else {
-      sessionStorage.setItem("name",displayName);
-  }
-}
-*/
 const input = document.querySelector('.Chatbox #message-container #message-input');
 const form = document.querySelector('.Chatbox #message-container #form');
 const message = document.querySelector('.Chatbox #message-container #message');
 const messageBody = document.querySelector('.Chatbox #message-container');
 
+function stayConnected(){
+  const session = localStorage.getItem("sessionID");
+  if (session) {
+    socket.auth = {sessionID};
+    socket.connect();
+  }
+}
 
+//stayConnected();
 // Socket on connection,
-
+/*
 socket.on('connect', ()=>{
-    console.log(`Welcome welcome`);
-  });
+    console.log(`Connected using: ${socket.io.engine.transport.name}`);
+});
+*/
+
+// Whenever, page is refreshed (load), session will be maintained,
+window.onload = (event)=> {
+  stayConnected();
+};
+
+
+socket.connect();
 
 // Session Management,
-
-//socket.connect();
-
 socket.on('session', ({sessionID, userID})=>{
   // using auth, to store session ID,
   socket.auth = {sessionID};
@@ -90,12 +93,5 @@ function online(name) {
   onliner.innerText = `${name}`;
   document.querySelector('.Container .Users').appendChild(onliner);
 }
-
-
-
-
-
-
-
 
 
