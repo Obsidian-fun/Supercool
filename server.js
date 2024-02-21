@@ -176,9 +176,9 @@ app.get('/chatroom', (req, res)=> {
 
 import {InMemorySessionStore} from './sessionStore.js';
 const sessionStore = new InMemorySessionStore();    
-/*
+
 io.use((socket, next)=>{
-      const sessionID = socket.handshake.auth.sessionID;
+   /*   const sessionID = socket.handshake.auth.sessionID;
       if (sessionID != undefined){
         const session =  sessionStore.findSession(sessionID);
         console.log(session);
@@ -194,16 +194,15 @@ io.use((socket, next)=>{
           if (!username) {
             return next(new Error("invalid username"));
           }
-        // Creating new session  
-        socket.handshake.auth.username = username;
+        // Creating new session    */
+        socket.handshake.auth.username = value.array[value.array.length-1];
         socket.handshake.auth.sessionID = uuid();
         socket.handshake.auth.userID = uuid();   
-        console.log(socket.handshake.auth.username, socket.handshake.auth.sessionID);
+        console.log("Session ID in middleware: ", socket.handshake.auth.sessionID);
         next();
-      }
+    //  }
 });
 
-*/
 io.on('connection', (socket) =>{
     // Get the socket id, and the last user that connected, from value.array ,
     value.set(socket.id,value.array[value.array.length-1]); 
@@ -211,9 +210,10 @@ io.on('connection', (socket) =>{
     let user= value.get(socket.id);
     console.log(`${user} connected on ${socket.handshake.time}`);
     console.log(value.array);
+    console.log("Session ID successfully passed to connection: ",socket.handshake.auth.sessionID);
 
     // Creating session persistance in hashmap,
-    sessionStore.saveSession(socket.sessionID, {
+    sessionStore.saveSession(socket.handshake.auth.sessionID, {
       userID: socket.handshake.auth.userID,
       username: socket.handshake.auth.username,
       connected: true,
