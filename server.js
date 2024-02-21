@@ -198,7 +198,6 @@ io.use((socket, next)=>{
         socket.handshake.auth.username = value.array[value.array.length-1];
         socket.handshake.auth.sessionID = uuid();
         socket.handshake.auth.userID = uuid();   
-        console.log("Session ID in middleware: ", socket.handshake.auth.sessionID);
         next();
     //  }
 });
@@ -210,7 +209,6 @@ io.on('connection', (socket) =>{
     let user= value.get(socket.id);
     console.log(`${user} connected on ${socket.handshake.time}`);
     console.log(value.array);
-    console.log("Session ID successfully passed to connection: ",socket.handshake.auth.sessionID);
 
     // Creating session persistance in hashmap,
     sessionStore.saveSession(socket.handshake.auth.sessionID, {
@@ -220,8 +218,8 @@ io.on('connection', (socket) =>{
     });
       
     socket.emit('session',{
-      sessionID: socket.sessionID,
-      userID: socket.userID,
+      sessionID: socket.handshake.auth.sessionID,
+      userID: socket.handshake.auth.userID,
     });
    
     socket.emit('users',value.array);
