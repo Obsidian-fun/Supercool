@@ -19,7 +19,7 @@ function stayConnected(){
     console.log('Preserved in local cache: ',socket.auth);
     socket.connect();
   }
-}
+
 // Whenever, page is refreshed (load), session will be maintained,
 socket.connect();
 // Session Management,
@@ -30,7 +30,7 @@ socket.on('session', ({sessionID, userID})=>{
   socket.userID = userID;
 });
 
-/*
+
 // Display list of users,
 socket.on('users',(users)=>{
   users.forEach((user)=>{
@@ -43,7 +43,7 @@ socket.on('user connected',(users)=>{
       online(users[users.length-1]);
 });
 
-
+/*
 // For sending messages,
 form.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -77,4 +77,4 @@ function online(name) {
   onliner.innerText = `${name}`;
   document.querySelector('.Container .Users').appendChild(onliner);
   }
-
+}

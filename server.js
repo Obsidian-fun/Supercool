@@ -218,16 +218,16 @@ io.on('connection', (socket) =>{
     });
      
     const session = sessionStore.findSession(socket.handshake.auth.sessionID);
-    console.log('session details:\n ', session);
+    console.log('session: ', session);
 
     socket.emit('session',{
       sessionID: socket.handshake.auth.sessionID,
       userID: socket.handshake.auth.userID,
     });
-/*   
+   
     socket.emit('users',value.array);
     socket.broadcast.emit('user connected',value.array);
-
+/*
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
     });
