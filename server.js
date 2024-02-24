@@ -212,9 +212,9 @@ io.on('connection', (socket) =>{
 
     // Creating session persistance in hashmap,
     sessionStore.saveSession(socket.handshake.auth.sessionID, {
+      sessionID: socket.handshake.auth.sessionID,
       userID: socket.handshake.auth.userID,
       username: socket.handshake.auth.username,
-//      connected: true,
     });
      
     const session = sessionStore.findSession(socket.handshake.auth.sessionID);
@@ -224,7 +224,7 @@ io.on('connection', (socket) =>{
       sessionID: socket.handshake.auth.sessionID,
       userID: socket.handshake.auth.userID,
     });
-   
+/*   
     socket.emit('users',value.array);
     socket.broadcast.emit('user connected',value.array);
 
@@ -237,11 +237,10 @@ io.on('connection', (socket) =>{
     });
    
     socket.on('disconnect', (msg) => {
-      console.log(value.get(socket.id), ' disconnected');
+      console.log(user, ' disconnected');
       value.splice(user);
       value.delete(socket.id);
-    });
-
+    }); */
   });
 
 

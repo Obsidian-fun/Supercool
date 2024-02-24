@@ -4,8 +4,7 @@ const URL = "http://localhost:3890";
 const socket = io(
   {
      autoConnect: false,
- //   socket.handshake.auth = sessionStorage.name
-      transports: ["websockets","polling"],
+     transports: ["websockets","polling"],
   });
 
 const input = document.querySelector('.Chatbox #message-container #message-input');
@@ -17,36 +16,21 @@ function stayConnected(){
   const session = localStorage.getItem("sessionID");
   if (session) {
     socket.auth = {sessionID};
+    console.log('Preserved in local cache: ',socket.auth);
     socket.connect();
   }
 }
-
-//stayConnected();
-// Socket on connection,
-/*
-socket.on('connect', ()=>{
-    console.log(`Connected using: ${socket.io.engine.transport.name}`);
-});
-*/
-
 // Whenever, page is refreshed (load), session will be maintained,
-window.onload = (event)=> {
-  stayConnected();
-};
-
-
 socket.connect();
-
 // Session Management,
 socket.on('session', ({sessionID, userID})=>{
   // using auth, to store session ID,
-  socket.auth = {sessionID};
-  console.log(socket.auth);
-  window.localStorage.setItem("sessionID",sessionID);
+  console.log(sessionID);
+  localStorage.setItem("sessionID",sessionID);
   socket.userID = userID;
 });
 
-
+/*
 // Display list of users,
 socket.on('users',(users)=>{
   users.forEach((user)=>{
@@ -81,17 +65,16 @@ socket.on('disconnect' , (msg)=>{
   document.querySelector('.Chatbox #message-container #message').append(el);
 });
 
-
+*/
 function display(name, message) {
   const el = document.createElement('li');
   el.innerText = `${name}: ${message}`;
   document.querySelector('.Chatbox #message-container #message').append(el);
-}
+  }
 
 function online(name) {
   const onliner = document.createElement('ul');
   onliner.innerText = `${name}`;
   document.querySelector('.Container .Users').appendChild(onliner);
-}
-
+  }
 
