@@ -15,8 +15,8 @@ const messageBody = document.querySelector('.Chatbox #message-container');
 function stayConnected(){
   const session = localStorage.getItem("sessionID");
   if (session) {
-    socket.auth = {sessionID};
-    console.log('Preserved in local cache: ',socket.auth);
+  //  socket.auth
+    console.log('Preserved in local cache: ',session);
     socket.connect();
   }
 
@@ -43,7 +43,6 @@ socket.on('user connected',(users)=>{
       online(users[users.length-1]);
 });
 
-/*
 // For sending messages,
 form.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -65,7 +64,9 @@ socket.on('disconnect' , (msg)=>{
   document.querySelector('.Chatbox #message-container #message').append(el);
 });
 
-*/
+}
+stayConnected();
+
 function display(name, message) {
   const el = document.createElement('li');
   el.innerText = `${name}: ${message}`;
@@ -77,4 +78,4 @@ function online(name) {
   onliner.innerText = `${name}`;
   document.querySelector('.Container .Users').appendChild(onliner);
   }
-}
+

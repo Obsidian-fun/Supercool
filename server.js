@@ -182,6 +182,7 @@ const sessionStore = new InMemorySessionStore();
 io.use((socket, next)=>{
       const sessionID = socket.handshake.auth.sessionID;
       if (sessionID){
+        console.log("This finally got called");
         const session =  sessionStore.findSession(socket.handshake.auth.sessionID);
         console.log(session);
         if (session){
@@ -205,10 +206,8 @@ io.use((socket, next)=>{
 
 io.on('connection', (socket) =>{
     // Get the socket id, and the last user that connected, from value.array ,
-    value.set(socket.id,value.array[value.array.length-1]); 
-    let user= value.get(socket.id);
-    console.log(`${user} connected on ${socket.handshake.time}`);
-    console.log(value.array);
+    let user= value.array[value.array.length -1];
+//    console.log(value.array);
 
     // Creating session persistance in hashmap,
     sessionStore.saveSession(socket.handshake.auth.sessionID, {
@@ -216,18 +215,30 @@ io.on('connection', (socket) =>{
       userID: socket.handshake.auth.userID,
       username: socket.handshake.auth.username,
     });
-     
+   
+    console.log(`${user} connected on ${socket.handshake.time}`);
+
+    const users=[];
+    for (let [id, sockets] of io.of("/").sockets){
+      users.push({
+        userID: socket.handshake.auth.username,
+        socketID: socket.id,
+      });
+      console.log(users);
+    }
+
+
     const session = sessionStore.findSession(socket.handshake.auth.sessionID);
-    console.log('session: ', session);
+//    console.log('session: ', session);
 
     socket.emit('session',{
       sessionID: socket.handshake.auth.sessionID,
       userID: socket.handshake.auth.userID,
     });
    
-    socket.emit('users',value.array);
+    socket.emit('users',users);
     socket.broadcast.emit('user connected',value.array);
-/*
+
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
     });
@@ -239,8 +250,7 @@ io.on('connection', (socket) =>{
     socket.on('disconnect', (msg) => {
       console.log(user, ' disconnected');
       value.splice(user);
-      value.delete(socket.id);
-    }); */
+    }); 
   });
 
 
