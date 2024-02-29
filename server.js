@@ -206,34 +206,33 @@ io.use((socket, next)=>{
 
 io.on('connection', (socket) =>{
     // Get the socket id, and the last user that connected, from value.array ,
-    let user= value.array[value.array.length -1];
-//    console.log(value.array);
+    let user= value.array[value.array.length -1]; // [Remove array later since hashmap is taking care of user history]
 
     // Creating session persistance in hashmap,
     sessionStore.saveSession(socket.handshake.auth.sessionID, {
-      sessionID: socket.handshake.auth.sessionID,
-      userID: socket.handshake.auth.userID,
-      username: socket.handshake.auth.username,
-    });
-   
-    console.log(`${user} connected on ${socket.handshake.time}`);
+                      sessionID: socket.handshake.auth.sessionID,
+                      userID: socket.handshake.auth.userID,
+                      username: socket.handshake.auth.username,
+                    });
+
+    const session = sessionStore.findSession(socket.handshake.auth.sessionID);
+    console.log(`${session.username} connected on ${socket.handshake.time}`);
+
+    
+
 
     const users=[];
     for (let [id, sockets] of io.of("/").sockets){
       users.push({
-        userID: socket.handshake.auth.username,
-        socketID: socket.id,
+        username: session.username,
+        socketID: id,
       });
-      console.log(users);
+   //   console.log(users);
     }
 
-
-    const session = sessionStore.findSession(socket.handshake.auth.sessionID);
-//    console.log('session: ', session);
-
     socket.emit('session',{
-      sessionID: socket.handshake.auth.sessionID,
-      userID: socket.handshake.auth.userID,
+      sessionID: session.sessionID,
+      userID: session.userID,
     });
    
     socket.emit('users',users);

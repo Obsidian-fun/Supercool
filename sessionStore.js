@@ -25,6 +25,10 @@ export class InMemorySessionStore extends SessionStore {
     this.sessions.set(id, session);
   }
 
+  deleteSession(id){
+    this.sessions.delete(id);
+  }
+
   findAllSessions(){
     return [...this.sessions.values()];
   }

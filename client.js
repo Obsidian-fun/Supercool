@@ -33,9 +33,17 @@ socket.on('session', ({sessionID, userID})=>{
 
 // Display list of users,
 socket.on('users',(users)=>{
-  users.forEach((user)=>{
+
+  for( let i=0; i<users.length; i++){
+    console.log(users[i].userID);
+    let name = users[i].userID;
+    online(name);
+  }
+
+
+/*  userID.forEach((user)=>{
     online(user);
-  });
+  }); */
 });
 
 // Display connected user to other users,
