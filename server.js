@@ -184,7 +184,6 @@ io.use((socket, next)=>{
       if (sessionID){
         console.log("This finally got called");
         const session =  sessionStore.findSession(socket.handshake.auth.sessionID);
-        console.log(session);
         if (session){
           socket.handshake.auth.sessionID = sessionID;
           socket.handshake.auth.userID = session.userID;
@@ -197,7 +196,7 @@ io.use((socket, next)=>{
             return next(new Error("invalid username"));
           }
         // Creating new session    */
-        socket.handshake.auth.username = username;
+        socket.username = username;
         socket.handshake.auth.sessionID = uuid();
         socket.handshake.auth.userID = uuid();   
         next();
@@ -210,24 +209,19 @@ io.on('connection', (socket) =>{
 
     // Creating session persistance in hashmap,
     sessionStore.saveSession(socket.handshake.auth.sessionID, {
-                      sessionID: socket.handshake.auth.sessionID,
                       userID: socket.handshake.auth.userID,
                       username: socket.handshake.auth.username,
                     });
 
-    const session = sessionStore.findSession(socket.handshake.auth.sessionID);
-    console.log(`${session.username} connected on ${socket.handshake.time}`);
-
-    
-
-
+    console.log(`${user} connected on ${socket.handshake.time}`);
+/*
     const users=[];
-    for (let [id, sockets] of io.of("/").sockets){
+    for (let [id,socket] of io.of("/").sockets){
       users.push({
         username: session.username,
         socketID: id,
       });
-   //   console.log(users);
+      console.log(users);
     }
 
     socket.emit('session',{
@@ -236,7 +230,9 @@ io.on('connection', (socket) =>{
     });
    
     socket.emit('users',users);
-    socket.broadcast.emit('user connected',value.array);
+    socket.broadcast.emit('user connected',{
+      username: users[users.length-1].username,
+    });
 
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
@@ -248,8 +244,11 @@ io.on('connection', (socket) =>{
    
     socket.on('disconnect', (msg) => {
       console.log(user, ' disconnected');
+      sessionStore.deleteSession(socket.handshake.auth.sessionID)
       value.splice(user);
     }); 
+
+*/    
   });
 
 

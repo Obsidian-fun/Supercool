@@ -35,11 +35,9 @@ socket.on('session', ({sessionID, userID})=>{
 socket.on('users',(users)=>{
 
   for( let i=0; i<users.length; i++){
-    console.log(users[i].userID);
-    let name = users[i].userID;
+    let name = users[i].username;
     online(name);
   }
-
 
 /*  userID.forEach((user)=>{
     online(user);
@@ -47,8 +45,8 @@ socket.on('users',(users)=>{
 });
 
 // Display connected user to other users,
-socket.on('user connected',(users)=>{
-      online(users[users.length-1]);
+socket.on('user connected',({username})=>{
+      online(username);
 });
 
 // For sending messages,
