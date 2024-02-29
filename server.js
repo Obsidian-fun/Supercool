@@ -217,9 +217,8 @@ io.on('connection', (socket) =>{
     console.log(socket.sessionID);
     console.log(`${user} connected on ${socket.handshake.time}`);
     
-    /*
     const users=[];
-    sessionStore.findAllSessions.forEach((session)=>{
+    sessionStore.findAllSessions().forEach((session)=>{
       users.push({
         userID: session.userID,
         username: session.username,
@@ -248,7 +247,6 @@ io.on('connection', (socket) =>{
  //     sessionStore.deleteSession(socket.sessionID)
       value.splice(user);
     }); 
-    */
 });
 
 
