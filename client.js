@@ -12,6 +12,7 @@ const form = document.querySelector('.Chatbox #message-container #form');
 const message = document.querySelector('.Chatbox #message-container #message');
 const messageBody = document.querySelector('.Chatbox #message-container');
 
+// Whenever, page is refreshed (load), session will be maintained,
 function stayConnected(){
   const session = localStorage.getItem("sessionID");
   if (session) {
@@ -20,8 +21,8 @@ function stayConnected(){
     socket.connect();
   }
 
-// Whenever, page is refreshed (load), session will be maintained,
 socket.connect();
+
 // Session Management,
 socket.on('session', ({sessionID, userID})=>{
   // using auth, to store session ID,

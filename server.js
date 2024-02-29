@@ -180,53 +180,54 @@ import {InMemorySessionStore} from './sessionStore.js';
 const sessionStore = new InMemorySessionStore();    
 
 io.use((socket, next)=>{
-      const sessionID = socket.handshake.auth.sessionID;
+      let sessionID = socket.handshake.auth.sessionID;
       if (sessionID){
         console.log("This finally got called");
-        const session =  sessionStore.findSession(socket.handshake.auth.sessionID);
+        const session =  sessionStore.findSession(socket.sessionID);
         if (session){
-          socket.handshake.auth.sessionID = sessionID;
-          socket.handshake.auth.userID = session.userID;
-          socket.handshake.auth.username = session.username;
+          socket.sessionID = sessionID;
+          socket.userID = session.userID;
+          socket.username = session.username;
           return next();
         }
       } else { 
-          const username = value.array[value.array.length-1];
+          const username = socket.handshake.auth.username;
           if (!username) {
             return next(new Error("invalid username"));
           }
         // Creating new session    */
         socket.username = username;
-        socket.handshake.auth.sessionID = uuid();
-        socket.handshake.auth.userID = uuid();   
+        socket.sessionID = uuid();
+        socket.userID = uuid();   
         next();
       }
 });
 
 io.on('connection', (socket) =>{
     // Get the socket id, and the last user that connected, from value.array ,
-    let user= value.array[value.array.length -1]; // [Remove array later since hashmap is taking care of user history]
+    let user= value.array[value.array.length -1]; 
 
     // Creating session persistance in hashmap,
-    sessionStore.saveSession(socket.handshake.auth.sessionID, {
-                      userID: socket.handshake.auth.userID,
-                      username: socket.handshake.auth.username,
+    sessionStore.saveSession(socket.sessionID, {
+                      userID: socket.userID,
+                      username: socket.username,
                     });
 
+    console.log(socket.sessionID);
     console.log(`${user} connected on ${socket.handshake.time}`);
-/*
+    
     const users=[];
     for (let [id,socket] of io.of("/").sockets){
       users.push({
-        username: session.username,
+        username: socket.username,
         socketID: id,
       });
       console.log(users);
     }
 
     socket.emit('session',{
-      sessionID: session.sessionID,
-      userID: session.userID,
+      sessionID: socket.sessionID,
+      userID: socket.userID,
     });
    
     socket.emit('users',users);
@@ -244,12 +245,11 @@ io.on('connection', (socket) =>{
    
     socket.on('disconnect', (msg) => {
       console.log(user, ' disconnected');
-      sessionStore.deleteSession(socket.handshake.auth.sessionID)
+ //     sessionStore.deleteSession(socket.sessionID)
       value.splice(user);
     }); 
-
-*/    
-  });
+    
+});
 
 
 server.listen(port, ()=> {
