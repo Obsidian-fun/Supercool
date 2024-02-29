@@ -224,7 +224,6 @@ io.on('connection', (socket) =>{
         username: session.username,
       });
     });
-      
 
     socket.emit('session',{
       sessionID: socket.sessionID,
