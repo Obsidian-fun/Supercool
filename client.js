@@ -34,20 +34,15 @@ socket.on('session', ({sessionID, userID})=>{
 
 // Display list of users,
 socket.on('users',(users)=>{
-
   for( let i=0; i<users.length; i++){
     let name = users[i].username;
     online(name);
   }
-
-/*  userID.forEach((user)=>{
-    online(user);
-  }); */
 });
 
 // Display connected user to other users,
-socket.on('user connected',({username})=>{
-      online(username);
+socket.on('user connected',(user)=>{
+      online(user);
 });
 
 // For sending messages,

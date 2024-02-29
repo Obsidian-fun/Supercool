@@ -180,10 +180,10 @@ import {InMemorySessionStore} from './sessionStore.js';
 const sessionStore = new InMemorySessionStore();    
 
 io.use((socket, next)=>{
-      let sessionID = socket.handshake.auth.sessionID;
-      if (sessionID){
+      const sessionID = socket.handshake.auth.sessionID;
+      if (sessionID !== undefined){
         console.log("This finally got called");
-        const session =  sessionStore.findSession(socket.sessionID);
+        const session =  sessionStore.findSession(sessionID);
         if (session){
           socket.sessionID = sessionID;
           socket.userID = session.userID;
@@ -191,7 +191,7 @@ io.use((socket, next)=>{
           return next();
         }
       } else { 
-          const username = socket.handshake.auth.username;
+          const username = value.array[value.array.length -1]; 
           if (!username) {
             return next(new Error("invalid username"));
           }
@@ -199,6 +199,7 @@ io.use((socket, next)=>{
         socket.username = username;
         socket.sessionID = uuid();
         socket.userID = uuid();   
+        console.log('bp2');
         next();
       }
 });
@@ -209,21 +210,22 @@ io.on('connection', (socket) =>{
 
     // Creating session persistance in hashmap,
     sessionStore.saveSession(socket.sessionID, {
-                      userID: socket.userID,
-                      username: socket.username,
-                    });
+        userID: socket.userID,
+        username: socket.username,
+      });
 
     console.log(socket.sessionID);
     console.log(`${user} connected on ${socket.handshake.time}`);
     
+    /*
     const users=[];
-    for (let [id,socket] of io.of("/").sockets){
+    sessionStore.findAllSessions.forEach((session)=>{
       users.push({
-        username: socket.username,
-        socketID: id,
+        userID: session.userID,
+        username: session.username,
       });
-      console.log(users);
-    }
+    });
+      
 
     socket.emit('session',{
       sessionID: socket.sessionID,
@@ -231,9 +233,7 @@ io.on('connection', (socket) =>{
     });
    
     socket.emit('users',users);
-    socket.broadcast.emit('user connected',{
-      username: users[users.length-1].username,
-    });
+    socket.broadcast.emit('user connected',user);
 
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
@@ -248,7 +248,7 @@ io.on('connection', (socket) =>{
  //     sessionStore.deleteSession(socket.sessionID)
       value.splice(user);
     }); 
-    
+    */
 });
 
 
