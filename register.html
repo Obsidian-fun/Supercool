@@ -199,6 +199,7 @@
               try {
                     if (response.status === 409) {
                           console.log("Username is taken, try again!");
+                          document.querySelector('.name-taken-error').style.display = 'block';
                         } else {
                              const data = await response.json();
                              console.log(data);
