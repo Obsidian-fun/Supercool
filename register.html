@@ -121,17 +121,17 @@
   }
  
   .name-error {
-    display:block;
+    display:none;
     color: white;
   }
 
   .name-taken-error {
-    display: block;
+    display:none;
     color: white;
   }
 
   .password-error {
-    display: block;
+    display:none;
     color: white;
   }
 
@@ -179,7 +179,7 @@
 
   <script>
         const form= document.querySelector('#register');
-        form.addEventListener('submit', (event) => {
+        form.addEventListener('submit', async(event) => {
               event.preventDefault();
               name = document.querySelector('.name').value;              
               email = document.querySelector('.email').value;
@@ -197,15 +197,28 @@
                         }),
                   })
               try {
-                    const data =  await response.json();
-                    if (data.user.password.length <= 2){
-                      document.querySelector('.name-error').style.display = block;
-                    }
+                    if (response.status === 409) {
+                          console.log("Username is taken, try again!");
+                        } else {
+                             const data = await response.json();
+                             console.log(data);
+                        }
+                    /*                            
+                    if  (data.body.username.length <= 2){
+                          document.querySelector('.name-error').style.display = block;
+                          console.log("Username cannot be 2 or less letters");
+                    } else if(data.body.password <= 8){
+                          document.querySelector('.password-error').style.display = block;
+                          console.log("Password less than 8 characters");
+                    } else {
+                          window.location.href = '/login';
+                        }
+                     */
                   }
               catch(err){
                     console.error(err);
                   }
-            
+            }); 
   </script>
 </body>
 </html>

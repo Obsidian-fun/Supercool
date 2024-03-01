@@ -9,6 +9,7 @@ import bodyParser from 'body-parser';
 import mysql from 'mysql';
 import HashMap from 'hashmap';
 import {uuid,cryptToken} from './systemToken/token.js';
+import {validateRegister} from './middleware/users.js';
 
 // socket.io imports,
 import { Server } from 'socket.io';
@@ -101,17 +102,17 @@ app.get('/signup', (req,res)=> {
 
 
 // All the POST routes,
-app.post('/register', (req, res)=>{
-  let { username, email, password } = req.body;
+app.post('/register',validateRegister, (req, res)=>{
+  const { username, email, password } = req.body;
   
-  connection.query(`SELECT USERNAME FROM users WHERE USERNAME=?`,[req.body.username], {
-    (result)=>{
-      if(result) {
-        res.status(401).send({
-          message:"Username already registered!",
+  connection.query(`SELECT id FROM users WHERE LOWER(username)=LOWER(?);`,[username],
+    (err, result)=>{
+      if( result && result.length > 0 ){
+        return res.status(409).send({
+          message:"Username already taken!",
         });
       } else {
-          bcrypt.hash(password, 10, (err, hash)=> {
+        bcrypt.hash(password, 10, (err, hash)=> {
             if(err){
               res.status(500).send({
                 message:err,
@@ -131,6 +132,9 @@ app.post('/register', (req, res)=>{
              ); 
             }
           });
+      }
+    }
+ );
 });
 
 
