@@ -16,7 +16,7 @@ const messageBody = document.querySelector('.Chatbox #message-container');
 function stayConnected(){
   const session = localStorage.getItem("sessionID");
   if (session) {
-  //  socket.auth
+//    socket.auth = sessionID;
     console.log('Preserved in local cache: ',session);
     socket.connect();
   }
@@ -27,6 +27,7 @@ socket.connect();
 socket.on('session', ({sessionID, userID})=>{
   // using auth, to store session ID,
   console.log(sessionID);
+  socket.auth = sessionID;
   localStorage.setItem("sessionID",sessionID);
   socket.userID = userID;
 });

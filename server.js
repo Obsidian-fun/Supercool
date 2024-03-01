@@ -104,26 +104,33 @@ app.get('/signup', (req,res)=> {
 app.post('/register', (req, res)=>{
   let { username, email, password } = req.body;
   
-  bcrypt.hash(password, 10, (err, hash)=> {
-    if(err){
-      res.status(500).send({
-        message:err,
-      })
-    } else {
-      connection.query(`INSERT INTO users (id, username, password, registered) VALUES (?, ?, ?, NOW());`,[uuid(), username, hash], 
-      (err, result) => {
-        if (err) {
-          return res.status(400).send({
-            message:err,
-          });
-        }
-        return res.status(200).send({
-          message:"Registered",
+  connection.query(`SELECT USERNAME FROM users WHERE USERNAME=?`,[req.body.username], {
+    (result)=>{
+      if(result) {
+        res.status(401).send({
+          message:"Username already registered!",
         });
-      }
-     ); 
-    }
-  });
+      } else {
+          bcrypt.hash(password, 10, (err, hash)=> {
+            if(err){
+              res.status(500).send({
+                message:err,
+              })
+            } else {
+              connection.query(`INSERT INTO users (id, username, password, registered) VALUES (?, ?, ?, NOW());`,[uuid(), username, hash], 
+              (err, result) => {
+                if (err) {
+                  return res.status(400).send({
+                    message:err,
+                  });
+                }
+                return res.status(200).send({
+                  message:"Registered",
+                });
+              }
+             ); 
+            }
+          });
 });
 
 

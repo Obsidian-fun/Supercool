@@ -119,7 +119,21 @@
   font-size: 18px;
   font-weight: 100;
   }
-  
+ 
+  .name-error {
+    display:block;
+    color: white;
+  }
+
+  .name-taken-error {
+    display: block;
+    color: white;
+  }
+
+  .password-error {
+    display: block;
+    color: white;
+  }
 
   </style>
 </head>
@@ -138,6 +152,8 @@
   <div>
   <input class="name" type="text" placeholder="Name" required autocomplete="off">
   </div>
+  <small class="name-error">Name should be greater than 2 letters</small>
+  <small class="name-taken-error">Username already taken</small>
 
   <div>
   <input class="email" type="email" placeholder="Email" required autocomplete="off">
@@ -146,6 +162,7 @@
   <div>
   <input class="password" type="password" placeholder="Password" required autocomplete="off">
   </div>
+  <small class="password-error">Password should be greater than 8 characters</small>
 
     <div class="container">
     <div class="center">
@@ -166,9 +183,9 @@
               event.preventDefault();
               name = document.querySelector('.name').value;              
               email = document.querySelector('.email').value;
-              password = document.querySelector('.password').value;         
+              password = document.querySelector('.password').value;          
 
-              const credentials = fetch('http://127.0.0.1:3890/register', {
+              const response= await fetch('http://127.0.0.1:3890/register', {
                     method: 'POST',
                     headers: {
                           'Content-Type': 'application/json',
@@ -179,10 +196,18 @@
                           password:password,
                         }),
                   })
-                .then(response => response.json())
-                .then(data => console.log(data));
-        });
+              try {
+                    const data =  await response.json();
+                    if (data.user.password.length <= 2){
+                      document.querySelector('.name-error').style.display = block;
+                    }
+                  }
+              catch(err){
+                    console.error(err);
+                  }
+            
   </script>
 </body>
 </html>
+
 
