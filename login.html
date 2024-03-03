@@ -120,6 +120,11 @@
     color: white;
   }
 
+  .login-error {
+    color: white;
+    display: none;
+  }
+
   </style>
 </head>
 <body>
@@ -134,6 +139,7 @@
  
   <form action="/login" id="login" method="POST">
   <h2>Login</h2>  
+  <small class="login-error">Incorrect username or password!</small>
   <div>
   <input class="username" name="username" type="text" placeholder="Name" autocomplete="off">
   </div>
@@ -183,13 +189,15 @@
                            }),
                 })
             try {
-              const data = await response.json();
-              if(data.user.password) {
-                  window.location.href = '/chatroom';
-              } else {
-                  alert('Incorrect username or password!');
-              }
-            }
+                  if (response.code  === 401) {
+                    document.querySelector('.login-error').style.display = 'block';
+                      } else {
+                         const data = await response.json();              
+                         if(data.user.password) {
+                             window.location.href = '/chatroom';
+                         }
+                      }
+             }
             catch(err) {
                   console.log(err);
             }
