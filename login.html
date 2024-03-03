@@ -189,19 +189,21 @@
                            }),
                 })
             try {
-                  if (response.code  === 401) {
+                  if (response.status === 401) {
                     document.querySelector('.login-error').style.display = 'block';
-                      } else {
+                    console.log("Incorrect username or password!");
+                      }else {
                          const data = await response.json();              
-                         if(data.user.password) {
+                          if(data.user.password) {
                              window.location.href = '/chatroom';
-                         }
-                      }
-             }
+                          }
+                       }
+                }
             catch(err) {
-                  console.log(err);
+                  console.log("Incorrect username or password!");
+                  document.querySelector('.login-error').style.display = 'block';
             }
-          });        
+      }); 
   </script>
 
 
