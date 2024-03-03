@@ -200,17 +200,17 @@
                     if (response.status === 409) {
                           console.log("Username is taken, try again!");
                           document.querySelector('.name-taken-error').style.display = 'block';
-                        } else {
+                        } else if( response.status === 400){
+                            console.log("Username should be greater than 2 letters");
+                            document.querySelector('.name-error').style.display = 'block';
+                            } else if ( response.status === 401){
+                                  console.log("Password should be greater than 8 characters");
+                                  document.querySelector('.password-error').style.display = 'block';
+                            } else {
                              const data = await response.json();
                              console.log(data);
-                        }
-                    /*                            
-                    if  (data.body.username.length <= 2){
-                          document.querySelector('.name-error').style.display = block;
-                          console.log("Username cannot be 2 or less letters");
-                    } else if(data.body.password <= 8){
-                          document.querySelector('.password-error').style.display = block;
-                          console.log("Password less than 8 characters");
+                            }
+                    /*
                     } else {
                           window.location.href = '/login';
                         }

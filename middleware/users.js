@@ -7,7 +7,7 @@ export function validateRegister(req,res,next){
     });
   }
   if (!req.body.password || req.body.password.length < 8){
-    return res.status(400).send({
+    return res.status(401).send({
       message:'Password must be atleast 8 characters',
     });
   }
