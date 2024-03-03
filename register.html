@@ -209,12 +209,9 @@
                             } else {
                              const data = await response.json();
                              console.log(data);
+                             // Redirects to login page after registration completes,
+                             window.location.href = '/';
                             }
-                    /*
-                    } else {
-                          window.location.href = '/login';
-                        }
-                     */
                   }
               catch(err){
                     console.error(err);
