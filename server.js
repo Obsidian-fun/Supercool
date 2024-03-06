@@ -255,7 +255,7 @@ io.on('connection', (socket) =>{
     socket.on('disconnect', (msg) => {
       console.log(user, ' disconnected');
  //     sessionStore.deleteSession(socket.sessionID)
-      value.splice(user);
+ //     value.splice(user);
     }); 
 });
 
