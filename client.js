@@ -52,6 +52,7 @@ function stayConnected(){
           let name = users[i].username;
           online(name);
         }
+        console.log(users);
       });
       
       // Display connected user to other users,

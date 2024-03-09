@@ -191,8 +191,11 @@ import {InMemorySessionStore} from './sessionStore.js';
 const sessionStore = new InMemorySessionStore();    
 
 io.use((socket, next)=>{
-      const sessionID = socket.handshake.auth.sessionID;
-      if (sessionID !== undefined){
+  // Since there are no auth parameters used in socket.handshake.auth, let's use socket.SessionID,
+      let sessionID = socket.sessionID;
+      console.log(socket);
+      console.log('bp1');
+      if (sessionID){
         console.log("This finally got called");
         const session =  sessionStore.findSession(sessionID);
         if (session){
@@ -225,9 +228,9 @@ io.on('connection', (socket) =>{
         username: socket.username,
       });
 
-    console.log(socket.sessionID);
     console.log(`${user} connected on ${socket.handshake.time}`);
-    
+    console.log(socket.sessionID);
+
     const users=[];
     sessionStore.findAllSessions().forEach((session)=>{
       users.push({
@@ -256,6 +259,8 @@ io.on('connection', (socket) =>{
       console.log(user, ' disconnected');
  //     sessionStore.deleteSession(socket.sessionID)
  //     value.splice(user);
+
+
     }); 
 });
 
