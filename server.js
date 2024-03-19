@@ -20,12 +20,12 @@ const server=createServer(app);
 
 
 // TODO change secret, secure and maxAge params
-app.use(session({
+const sessionMiddleware = app.use(session({
   secret:'change_this_key',
-  resave:false,
-  saveUnintialized:false,
+  resave: false,
+  saveUninitialized: false,
   cookie: {
-    sameSite: 'strict'
+    sameSite: 'strict',
     httpOnly: true,
     secure: false,
     maxAge: null
@@ -117,6 +117,9 @@ connection.connect();
 
 // Initial GET requests to fetch pages,
 app.get('/', (req,res)=> {
+  if(req.session.loggedIn){
+    res.redirect('/chatroom');
+  }
   res.sendFile(join(__dirname,'login.html'));
 });
 
@@ -190,7 +193,10 @@ app.post('/login', (req, res)=> {
                 // UPDATE login time of user,
                connection.query(`UPDATE users SET last_login=NOW() WHERE id=?;`, [result[0].id,]);
                value.push(username);
-               
+              
+              req.session.loggedIn = true;  
+              req.session.user = username;
+                
               return res.status(200).send({
                 message:"Logged In!",
                 user: result[0],
@@ -213,10 +219,13 @@ app.get('/chatroom', (req, res)=> {
 import {InMemorySessionStore} from './sessionStore.js';
 const sessionStore = new InMemorySessionStore();    
 
+io.engine.use(sessionMiddleware);
 io.use((socket, next)=>{
 // Using a hashmap to manage username and session key. The key is last username saved in array.
   let sessionID = socket.handshake.auth.sessionID;
-  console.log("Middleware session ID", sessionID);
+  const cookieInfo = socket.request.session;
+  console.log("Express cookie", cookieInfo);
+//  console.log("Middleware session ID", sessionID);
       if(sessionID){
         console.log("This finally got called");
         const session =  sessionStore.findSession(sessionID);
@@ -247,7 +256,6 @@ io.on('connection', (socket) =>{
 
     //TODO [DELETE]?? Saving a hashmaps of sessionID to user,
     value.set(user, socket.sessionID);
-    console.log(socket);
 
     //TODO [DELETE] session ID value
     console.log("Session ID for connection: ",socket.sessionID);
@@ -290,6 +298,16 @@ io.on('connection', (socket) =>{
  //     value.splice(user);
 
     }); 
+});
+
+app.get('/logout',(req,res)=>{
+  req.session.destroy(function (err){
+    if (err) {
+      console.log(err);
+    } else {
+      res.sendFile(join(__dirname,'login.html'));
+    }
+  });
 });
 
 
