@@ -1,4 +1,5 @@
 import express from 'express';
+import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -16,9 +17,16 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';  // Routing
 
 const app = express();
+
+
+
 const server=createServer(app);
 const io= new Server(server, {
   transports: ["websockets","polling"],
+  cors: {
+    origin: "http://127.0.0.1:3890",
+    credentials: true,
+  }
 });
 
 
@@ -28,6 +36,7 @@ class User{
   constructor(){
     this.hashmap = new HashMap();
     this.array = [];
+    this.initialLoggedIn = true;
   }
   push(name){
     this.array.push(name);
@@ -70,7 +79,12 @@ let port = process.env.PORT || 3000;
 
 app.set('view engine','EJS');
 
-app.use(cors('http://localhost:${process.env.PORT}')) // Enable ALL cross origin sharing ( DANGEROUS - PLEASE CHANGE IN PRODUCTION)
+app.use(cors('http://localhost:${process.env.PORT}')) 
+/***
+FIXME
+Enable ALL cross origin sharing ( DANGEROUS - 
+PLEASE CHANGE IN PRODUCTION)
+***/  
 app.use(bodyParser.json())
 
 // setting the default path
@@ -90,7 +104,6 @@ const connection = mysql.createConnection({
 });
 connection.connect();
 
-
 // Initial GET requests to fetch pages,
 app.get('/', (req,res)=> {
   res.sendFile(join(__dirname,'login.html'));
@@ -99,7 +112,6 @@ app.get('/', (req,res)=> {
 app.get('/signup', (req,res)=> {
   res.sendFile(join(__dirname,'register.html'));
 });
-
 
 // All the POST routes,
 app.post('/register',validateRegister, (req, res)=>{
@@ -191,17 +203,17 @@ import {InMemorySessionStore} from './sessionStore.js';
 const sessionStore = new InMemorySessionStore();    
 
 io.use((socket, next)=>{
-  // Since there are no auth parameters used in socket.handshake.auth, let's use socket.SessionID,
-      let sessionID = socket.sessionID;
-      console.log(socket);
-      console.log('bp1');
-      if (sessionID){
+// Using a hashmap to manage username and session key. The key is last username saved in array.
+  let sessionID = socket.handshake.auth.sessionID;
+  console.log("Middleware session ID", sessionID);
+      if(sessionID){
         console.log("This finally got called");
         const session =  sessionStore.findSession(sessionID);
         if (session){
           socket.sessionID = sessionID;
           socket.userID = session.userID;
           socket.username = session.username;
+          console.log('bp2');
           return next();
         }
       } else { 
@@ -209,11 +221,11 @@ io.use((socket, next)=>{
           if (!username) {
             return next(new Error("invalid username"));
           }
-        // Creating new session    */
+        // Creating a new session if no socket.handshake was established,
         socket.username = username;
         socket.sessionID = uuid();
         socket.userID = uuid();   
-        console.log('bp2');
+        console.log('bp1');
         next();
       }
 });
@@ -222,6 +234,13 @@ io.on('connection', (socket) =>{
     // Get the socket id, and the last user that connected, from value.array ,
     let user= value.array[value.array.length -1]; 
 
+    //TODO [DELETE]?? Saving a hashmaps of sessionID to user,
+    value.set(user, socket.sessionID);
+    console.log(socket);
+
+    //TODO [DELETE] session ID value
+    console.log("Session ID for connection: ",socket.sessionID);
+
     // Creating session persistance in hashmap,
     sessionStore.saveSession(socket.sessionID, {
         userID: socket.userID,
@@ -229,7 +248,6 @@ io.on('connection', (socket) =>{
       });
 
     console.log(`${user} connected on ${socket.handshake.time}`);
-    console.log(socket.sessionID);
 
     const users=[];
     sessionStore.findAllSessions().forEach((session)=>{
@@ -260,7 +278,6 @@ io.on('connection', (socket) =>{
  //     sessionStore.deleteSession(socket.sessionID)
  //     value.splice(user);
 
-
     }); 
 });
 
@@ -268,4 +285,3 @@ io.on('connection', (socket) =>{
 server.listen(port, ()=> {
   console.log(`Server listening on ${port}`);
 });
-
