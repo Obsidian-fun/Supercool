@@ -11,16 +11,27 @@ import mysql from 'mysql';
 import HashMap from 'hashmap';
 import {uuid,cryptToken} from './systemToken/token.js';
 import {validateRegister} from './middleware/users.js';
-
-// socket.io imports,
 import { Server } from 'socket.io';
 import { createServer } from 'http';  // Routing
 
+// Initializers and middleware,
 const app = express();
-
-
-
 const server=createServer(app);
+
+
+// TODO change secret, secure and maxAge params
+app.use(session({
+  secret:'change_this_key',
+  resave:false,
+  saveUnintialized:false,
+  cookie: {
+    sameSite: 'strict'
+    httpOnly: true,
+    secure: false,
+    maxAge: null
+  }
+}));
+
 const io= new Server(server, {
   transports: ["websockets","polling"],
   cors: {
