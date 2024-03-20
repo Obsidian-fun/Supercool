@@ -90,12 +90,13 @@ let port = process.env.PORT || 3000;
 
 app.set('view engine','EJS');
 
-app.use(cors('http://localhost:${process.env.PORT}')) 
 /***
 FIXME
 Enable ALL cross origin sharing ( DANGEROUS - 
 PLEASE CHANGE IN PRODUCTION)
 ***/  
+app.use(cors('http://localhost:${process.env.PORT}')) 
+
 app.use(bodyParser.json())
 
 // setting the default path
@@ -216,6 +217,17 @@ app.get('/chatroom', (req, res)=> {
   res.render(join(__dirname,'chatroom.ejs'));  
 });
 
+app.get('/logout',(req,res)=>{
+  req.session.destroy(function (err){
+    if (err) {
+      console.log(err);
+    } else {
+      res.sendFile(join(__dirname,'login.html'));
+    }
+  });
+});
+
+
 import {InMemorySessionStore} from './sessionStore.js';
 const sessionStore = new InMemorySessionStore();    
 
@@ -225,6 +237,7 @@ io.use((socket, next)=>{
   let sessionID = socket.handshake.auth.sessionID;
   const cookieInfo = socket.request.session;
   console.log("Express cookie", cookieInfo);
+  console.log("Request headers from client",);
 //  console.log("Middleware session ID", sessionID);
       if(sessionID){
         console.log("This finally got called");
@@ -299,17 +312,6 @@ io.on('connection', (socket) =>{
 
     }); 
 });
-
-app.get('/logout',(req,res)=>{
-  req.session.destroy(function (err){
-    if (err) {
-      console.log(err);
-    } else {
-      res.sendFile(join(__dirname,'login.html'));
-    }
-  });
-});
-
 
 server.listen(port, ()=> {
   console.log(`Server listening on ${port}`);
