@@ -214,6 +214,9 @@ app.post('/login', (req, res)=> {
 
 // Secret route, only logged in users can fetch these pages,
 app.get('/chatroom', (req, res)=> {
+  // cookie extracted from the request header of client,
+  const cookie = req.headers.cookie.split('%')[1].split('.')[0];
+  console.log("Cookie for this session:", cookie);
   res.render(join(__dirname,'chatroom.ejs'));  
 });
 
@@ -231,13 +234,15 @@ app.get('/logout',(req,res)=>{
 import {InMemorySessionStore} from './sessionStore.js';
 const sessionStore = new InMemorySessionStore();    
 
+// Initialize express session object into socket session,
 io.engine.use(sessionMiddleware);
+
+// socket middleware,
 io.use((socket, next)=>{
-// Using a hashmap to manage username and session key. The key is last username saved in array.
+  // socket.handshake.cookie : cookie is saved in socket handshake
   let sessionID = socket.handshake.auth.sessionID;
   const cookieInfo = socket.request.session;
-  console.log("Express cookie", cookieInfo);
-  console.log("Request headers from client",);
+  console.log(socket);
 //  console.log("Middleware session ID", sessionID);
       if(sessionID){
         console.log("This finally got called");
