@@ -17,9 +17,6 @@ const socket = io(
 
 // Executing the main function that deals with the logic of sockets,
 
-//[DELETE] socket internal components
-console.log(socket.auth);
-
 stayConnected();
 // Whenever, page is refreshed (load), session will be maintained,
 function stayConnected(){
@@ -34,8 +31,8 @@ function stayConnected(){
       console.log('bp1');
       const session = localStorage.getItem("sessionID");
       if (session) {
-        socket.handshake.auth.sessionID = session;
-        console.log("Preserved socket.auth value", socket.handshake.auth.sessionID);
+       // socket.handshake.auth.sessionID = session;
+       // console.log("Preserved socket.auth value", socket.handshake.auth.sessionID);
         socket.connect();
       }
    }
@@ -46,7 +43,7 @@ function stayConnected(){
         localStorage.setItem("sessionID",sessionID);
      //   socket.handshake.auth.sessionID = {sessionID};
         socket.userID = {userID};
-        console.log("Session socket.auth value: ",socket.auth);
+        console.log("Session socket.auth value: ",socket.userID);
       });
       
       // Display list of users,

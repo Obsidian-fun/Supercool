@@ -214,9 +214,7 @@ app.post('/login', (req, res)=> {
 
 // Secret route, only logged in users can fetch these pages,
 app.get('/chatroom', (req, res)=> {
-  // cookie extracted from the request header of client,
-  const cookie = req.headers.cookie.split('%')[1].split('.')[0];
-  console.log("Cookie for this session:", cookie);
+  
   res.render(join(__dirname,'chatroom.ejs'));  
 });
 
@@ -240,11 +238,13 @@ io.engine.use(sessionMiddleware);
 // socket middleware,
 io.use((socket, next)=>{
   // socket.handshake.cookie : cookie is saved in socket handshake
-  let sessionID = socket.handshake.auth.sessionID;
+  //// cookie extracted from the request header of client,
+  let sessionID = socket.handshake.headers.cookie.split('%')[1].split('.')[0];
+  let initialLogin = true;
+  console.log("Socket cookie: ",sessionID);
   const cookieInfo = socket.request.session;
-  console.log(socket);
 //  console.log("Middleware session ID", sessionID);
-      if(sessionID){
+      if(sessionID && initialLogin === false){
         console.log("This finally got called");
         const session =  sessionStore.findSession(sessionID);
         if (session){
@@ -260,23 +260,18 @@ io.use((socket, next)=>{
             return next(new Error("invalid username"));
           }
         // Creating a new session if no socket.handshake was established,
+        socket.sessionID = sessionID;
         socket.username = username;
-        socket.sessionID = uuid();
         socket.userID = uuid();   
         console.log('bp1');
-        next();
+        initialLogin = false;
+        next();        
       }
 });
 
 io.on('connection', (socket) =>{
     // Get the socket id, and the last user that connected, from value.array ,
     let user= value.array[value.array.length -1]; 
-
-    //TODO [DELETE]?? Saving a hashmaps of sessionID to user,
-    value.set(user, socket.sessionID);
-
-    //TODO [DELETE] session ID value
-    console.log("Session ID for connection: ",socket.sessionID);
 
     // Creating session persistance in hashmap,
     sessionStore.saveSession(socket.sessionID, {
