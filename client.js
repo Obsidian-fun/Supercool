@@ -55,8 +55,9 @@ function stayConnected(){
       });
       
       // Display connected user to other users,
-      socket.on('user connected',(user)=>{
-            online(user);
+      socket.on('user connected',(users)=>{
+         const username = users.username; 
+         console.log(username);
       });
       
       // For sending messages,
@@ -69,8 +70,8 @@ function stayConnected(){
       });
       
       // For receiving messages,
-      socket.on('chat message', (user, text)=> {
-        display(user, text);
+      socket.on('chat message', ({username}, text)=> {
+        display(username, text);
         messageBody.scrollTo(0, messageBody.scrollHeight);
       });
 

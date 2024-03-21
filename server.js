@@ -18,7 +18,6 @@ import { createServer } from 'http';  // Routing
 const app = express();
 const server=createServer(app);
 
-
 // TODO change secret, secure and maxAge params
 const sessionMiddleware = app.use(session({
   secret:'change_this_key',
@@ -39,51 +38,6 @@ const io= new Server(server, {
     credentials: true,
   }
 });
-
-
-// Creating a class to store usernames with ids in a hashmap,
-
-class User{
-  constructor(){
-    this.hashmap = new HashMap();
-    this.array = [];
-    this.initialLoggedIn = true;
-  }
-  push(name){
-    this.array.push(name);
-  }
-  pop(){
-    this.array.pop();
-  }
-  splice(name){
-    this.array.splice(this.array.indexOf(name),1);
-  }
-  showArray(){
-    return this.array;
-  }
-  get(key) {
-    return this.hashmap.get(key);
-  }
-  set(key,value) {
-    this.hashmap.set(key, value);
-  }   
-  search(key) {
-    return this.hashmap.search(key);  
-  }
-  delete(key) {
-    this.hashmap.delete(key);
-  }
-  has(key) {
-    return this.hashmap.has(key);
-  }
-  size() {
-    return this.hashmap.size();
-  }
-  clear(key) {
-    this.hashmap.clear();
-  }
-}
-const value = new User();
 
 // Connecting server to listen on a port,
 let port = process.env.PORT || 3000;
@@ -193,10 +147,9 @@ app.post('/login', (req, res)=> {
               if(bResult) {
                 // UPDATE login time of user,
                connection.query(`UPDATE users SET last_login=NOW() WHERE id=?;`, [result[0].id,]);
-               value.push(username);
               
               req.session.loggedIn = true;  
-              req.session.user = username;
+              req.session.username = username;
                 
               return res.status(200).send({
                 message:"Logged In!",
@@ -223,6 +176,7 @@ app.get('/logout',(req,res)=>{
     if (err) {
       console.log(err);
     } else {
+
       res.sendFile(join(__dirname,'login.html'));
     }
   });
@@ -237,14 +191,15 @@ io.engine.use(sessionMiddleware);
 
 // socket middleware,
 io.use((socket, next)=>{
-  // socket.handshake.cookie : cookie is saved in socket handshake
+  // socket.handshake.headers.cookie : cookie is saved in socket handshake
   //// cookie extracted from the request header of client,
   let sessionID = socket.handshake.headers.cookie.split('%')[1].split('.')[0];
-  let initialLogin = true;
+
+  console.log("Details stored in cookie",socket.request.session);
   console.log("Socket cookie: ",sessionID);
   const cookieInfo = socket.request.session;
 //  console.log("Middleware session ID", sessionID);
-      if(sessionID && initialLogin === false){
+      if(sessionID === false){
         console.log("This finally got called");
         const session =  sessionStore.findSession(sessionID);
         if (session){
@@ -255,7 +210,7 @@ io.use((socket, next)=>{
           return next();
         }
       } else { 
-          const username = value.array[value.array.length -1]; 
+          const username = socket.request.session.username;
           if (!username) {
             return next(new Error("invalid username"));
           }
@@ -264,22 +219,21 @@ io.use((socket, next)=>{
         socket.username = username;
         socket.userID = uuid();   
         console.log('bp1');
-        initialLogin = false;
         next();        
       }
 });
 
 io.on('connection', (socket) =>{
     // Get the socket id, and the last user that connected, from value.array ,
-    let user= value.array[value.array.length -1]; 
 
     // Creating session persistance in hashmap,
     sessionStore.saveSession(socket.sessionID, {
+        username: socket.username,
         userID: socket.userID,
         username: socket.username,
       });
 
-    console.log(`${user} connected on ${socket.handshake.time}`);
+    console.log(`${socket.username} connected on ${socket.handshake.time}`);
 
     const users=[];
     sessionStore.findAllSessions().forEach((session)=>{
@@ -295,20 +249,19 @@ io.on('connection', (socket) =>{
     });
    
     socket.emit('users',users);
-    socket.broadcast.emit('user connected',user);
+    socket.broadcast.emit('user connected',users);
 
     socket.onAny((event, ...args)=>{    // Catch all socket events
       console.log(event, args);
     });
 
     socket.on('chat message', (msg)=> {
-      io.emit('chat message', user, msg);
+      io.emit('chat message', {username: socket.username}, msg);
     });
    
     socket.on('disconnect', (msg) => {
-      console.log(user, ' disconnected');
+      console.log(socket.username, ' disconnected');
  //     sessionStore.deleteSession(socket.sessionID)
- //     value.splice(user);
 
     }); 
 });
