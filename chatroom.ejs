@@ -32,6 +32,10 @@
     color: #d3e4d5;
    }
 
+   h3{
+    margin-left: 25%;
+   }
+
   .credit-header {
     display: flex;
    }
@@ -53,6 +57,7 @@
     border-radius: 50%;
     margin-right: 20px;
     margin-top: 0px;
+    border: 1px solid yellow;
   }
 
   .obsidian:hover{
@@ -77,6 +82,7 @@
 
   .Container {
     display: flex;
+    margin-top: 10px;
   }
 
   .Container .Users{
@@ -86,22 +92,24 @@
     height: 100vh;
     border: 2px solid #9400d3;
   }
+  
   .Container .Chatbox {
     background-color: black;
     width: 80%;
     color: white;
-    height: 100vh;
     border: 2px solid #9400d3;
+    height: 100vh;
   }
  
   #form {
     position: absolute;
-    bottom: 0;
+    top: 100%;
   }
 
-  #form #message-input{
-    position: absolute;
-    width: 65%; 
+  .Container .Chatbox #form #message-input {
+    position: relative;
+    width: 65vw; 
+    font-size: 1.3rem;
     padding: 10px;
   }
 
@@ -111,7 +119,8 @@
     text-decoration: none;
     background-color: yellow;
     padding: 10px;
-    top: 100vh;
+    bottom: 0;
+    right: 10%;
   }
 
   </style>
@@ -129,13 +138,11 @@
   </div>
     <a href="/" class="navbar">Home</a>
     <a href="#" class="navbar">About</a>
-  </div>
 
  <div class="Container">
   <!-- User List -->
   <div class="Users">
     <h3>User List</h3>
-
   </div>
   <!-- Chatbox -->
   <div class="Chatbox">
@@ -147,7 +154,6 @@
     <a class="logout-button" href="/logout">LOG OUT</a>
     </div>
   </div>
-
-
  </div>
+
 </body>
