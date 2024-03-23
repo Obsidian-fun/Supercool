@@ -214,10 +214,14 @@
       const arrow = document.querySelector('.credit-header .arrow'); 
       const obsidian = document.querySelector('.credit-header .obsidian');
 
-      obsidian.addEventListener('mouseover', (event)=>{
-            event.preventDefault();
+      obsidian.addEventListener('mouseover', ()=>{
             credit.style.display = "block";
             arrow.style.display = "block";
+          });
+      
+      obsidian.addEventListener('mouseout', ()=>{    
+            credit.style.display = "none";
+            arrow.style.display = "none";
           });
 
 
