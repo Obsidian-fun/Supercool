@@ -57,7 +57,7 @@ function stayConnected(){
       // Display connected user to other users,
       socket.on('user connected',(users)=>{
          const username = users.username; 
-         console.log(username);
+         online(username);
       });
       
       // For sending messages,
