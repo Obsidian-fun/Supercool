@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supercool | Chat</title>
+  <script src="/node_modules/socket.io/client-dist/socket.io.js"></script>
+  <script def src="client.js" type="module"></script>
+  <style>
+
+
+  body{
+    background-color: #3c2207;
+  }
+
+  .header {
+        display: flex;
+            justify-content: space-between;
+              }
+
+    h1{
+          color: #d3e4d5;
+              background-color: #3c2207;
+                  padding-left: 20px;
+                      font-family: Chalkduster, fantasy;
+                          margin-top: 5px;
+                            }
+
+      h2{
+            font-size:1.5rem;
+                color: #d3e4d5;
+                  }
+        .credit-header {
+              display: flex;
+
+                }
+          .credit-header .credit{
+                color: white;
+                    font-size:1.2rem;
+                        font-family: Snell Roundhand, cursive;
+                            display: none;
+                              }
+            .credit-header .arrow{
+                  width: 100px;
+                      margin-top: 40px;
+                          display: none;
+                            }
+
+              .credit-header .obsidian{
+                    width: 80px;
+                        height:80px;
+                            border-radius: 50%;
+                                margin-right: 20px;
+                                    margin-top: 0px;
+                                      }
+
+                .obsidian:hover{
+                       border: 1px solid red;
+                         }
+
+                  em {
+                        background: linear-gradient(to right, violet, red);
+                            color: #1eeaaa;
+                              }
+
+                    .navbar {
+                          color: #d3e4d5;
+                              font-family: Chalkduster, fantasy;
+                                  font-size: 1.1rem;
+                                      padding-left: 20px;
+                                        }
+
+                      .navbar:hover {
+                            color: yellow;
+                              }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div>
+    <h1>SUPER&nbsp<em>COOL </em>&nbspCHATROOM</h1>
+
+  <div class="credit-header">
+   <p class="credit">Made by Obsidian 🙏</p>
+   <img class="arrow" src="./assets/arrow.png" alt="Arrow">
+   <a href="https://github.com/Obsidian-fun" target="_blank" rel="norefferer"><img class="obsidian" src="./assets/obsidian.png" alt="Obsidian"></a>
+  </div>
+
+    <a href="/" class="navbar">Home</a>
+  </div>
+
+ <div class="Container">
+  <!-- User List -->
+  <div class="Users">
+    <h3>User List</h3>
+
+  </div>
+  <!-- Chatbox -->
+  <div class="Chatbox">
+    <div id="message-container">
+      <ul id="message"></ul>
+    <form id="form" action="submit">
+       <input type="text" id="message-input" placeholder="Message...">
+    </form> 
+    <a class="logout-button" href="/logout">LOG OUT</a>
+    </div>
+  </div>
+
+
+ </div>
+</body>
