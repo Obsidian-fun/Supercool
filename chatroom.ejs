@@ -43,11 +43,13 @@
     color: white;
     font-size:1.2rem;
     font-family: Snell Roundhand, cursive;
+    display: none;
   }
 
   .credit-header .arrow{
     width: 100px;
     margin-top: 40px;
+    display: none;
   }
 
   .credit-header .obsidian{
@@ -59,7 +61,7 @@
     border: 1px solid yellow;
   }
 
-  .obsidian:hover{
+  .credit-header .obsidian:hover{
     border: 1px solid red;
   }
 
@@ -110,12 +112,13 @@
   }
 
   .Container .Chatbox #form #message-input {
-    position: relative;
+    position: absolute;
     width: 66vw; 
     font-size: 1.3rem;
     padding: 10px;
-    top: 90vh;
+    top: 112vh;
     border: 3px solid purple;
+    outline: none;
   }
 
   .logout-button {
@@ -123,12 +126,23 @@
     color: black;
     text-decoration: none;
     font-size: 1.3rem;
-    background-color: yellow;
+    background: linear-gradient(to right, red, orange, yellow, orange, red);
     padding: 10px;
     right: 1%;
     top: 112vh;
     border: 3px solid purple;
     width: 18vh;
+    -webkit-transistion: background-color 1s ease-out;
+    -moz-transition: background-color 1s ease-out;
+    -o-transition: background-color 1s ease-out;
+    transition-property: width, background-color;
+    transition-duration: 1s;
+    transition-timing-function: ease-out;
+  }
+
+  .logout-button:hover {
+    background-color:red;
+    color: white;
   }
 
   </style>
@@ -150,7 +164,7 @@
  <div class="Container">
   <!-- User List -->
   <div class="Users">
-    <h3>User List</h3>
+    <h3>Online Users</h3>
   </div>
   <!-- Chatbox -->
   <div class="Chatbox">
