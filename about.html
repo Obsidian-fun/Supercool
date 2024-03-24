@@ -78,14 +78,34 @@
   </style>
 </head>
 <body>
+  <div class="header">
+  <h1>SUPER&nbsp<em>COOL </em>&nbspCHATROOM</h1>
+    <div class="credit-header">
+    <p class="credit">Made by Obsidian 🙏</p>
+    <img class="arrow" src="./assets/arrow.png" alt="Arrow">
+    <a href="https://github.com/Obsidian-fun" target="_blank" rel="norefferer"><img class="obsidian" src="./assets/obsidian.png" alt="Obsidian"></a>
+    </div>
+  </div>
+  <a href="/" class="navbar">Home</a>
+  <a href="#" class="navbar">About</a>      
 
 
 
-
-
-
-
-
+<script>
+    const credit = document.querySelector('.credit-header .credit');
+    const arrow = document.querySelector('.credit-header .arrow'); 
+    const obsidian = document.querySelector('.credit-header .obsidian');
+                                                                         
+    obsidian.addEventListener('mouseover', ()=>{
+          credit.style.display = "block";
+          arrow.style.display = "block";
+        });
+    
+    obsidian.addEventListener('mouseout', ()=>{    
+          credit.style.display = "none";
+          arrow.style.display = "none";
+        });
+</script>
 
 </body>
 </html>
