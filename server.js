@@ -167,9 +167,23 @@ app.post('/login', (req, res)=> {
 
 // Secret route, only logged in users can fetch these pages,
 app.get('/chatroom', (req, res)=> {
-  
-  res.render(join(__dirname,'chatroom.ejs'));  
+ if(!req.session.loggedIn){
+   res.redirect('/login');
+ }
+  try {
+    res.render(join(__dirname,'chatroom.ejs'));  
+  }
+  catch (error){
+    if (error === 'ECONNRESET') {
+      console.log("Connection was reset");
+      res.status(500).send('Connection reset error');
+    } else {
+      console.log('Some other error apart form connection reset');
+      res.status(500).send('Internal server error');
+    }
+  }
 });
+
 
 app.get('/logout',(req,res)=>{
   req.session.destroy(function (err){
